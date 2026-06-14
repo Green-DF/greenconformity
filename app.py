@@ -47,7 +47,7 @@ st.markdown("""
 # Aplicação dos Títulos Centralizados Solicitados
 st.markdown('<h1 class="centered-title">🌱 Plataforma GreenConformity</h1>', unsafe_allow_html=True)
 st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
-st.markdown('<p class="centered-painel">Painel de Conformidade Ambiental e Certificação 601 Empreendimentos</p>', unsafe_allow_html=True)
+st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformidade Ambiental e Certificação</p>', unsafe_allow_html=True)
 st.markdown("---")
 
 # Barra Lateral - Filtros de Governança Corporativa
