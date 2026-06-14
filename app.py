@@ -162,3 +162,14 @@ with col2:
 # Rodapé de Conformidade
 st.markdown("---")
 st.caption("🔒 Certificação de Dados: GreenConformity segue as diretrizes do LEED BD+C v4/v4.1. Dados protegidos por chaves corporativas privadas de criptografia.")
+
+# --- TAB ENERGIA ---
+with tab_ea:
+    col_up, col_vis = st.columns([1, 1], gap="large")
+    with col_up:
+        st.markdown("#### ⚡ Monitoramento Energético (EA)")
+        st.file_uploader("Faturas de Energia Elétrica e Relatórios de Comissionamento:", type=["pdf", "csv"], key="ea_up")
+        st.metric("Consumo Acumulado", "42.850 kWh", "-5.2% vs Baseline")
+    with col_vis:
+        st.markdown("#### Curva de Demanda Operacional")
+        st.line_chart(pd.DataFrame({'kWh': [3500, 3200, 4100, 4500, 5200, 4800, 4100, 3900, 3800, 4200, 3100, 2900]}, index=df_vol['Mês']))
