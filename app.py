@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 import time
 
 # 1. Configuração de Alta Performance da Página
@@ -10,56 +11,23 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. Injeção de CSS para Centralização de Títulos e Estilização de Cartões
+# 2. Injeção de CSS para Estilização de Títulos e Containers
 st.markdown("""
     <style>
-    .centered-title {
-        text-align: center;
-        margin-bottom: 0px;
-        font-weight: 700;
-    }
-    .centered-subtitle {
-        text-align: center;
-        color: #666666;
-        margin-top: -10px;
-        margin-bottom: 5px;
-        font-size: 1.15rem;
-        font-weight: 500;
-    }
-    .centered-painel {
-        text-align: center;
-        color: #2e7d32;
-        margin-top: -5px;
-        margin-bottom: 25px;
-        font-size: 1.4rem;
-        font-weight: 600;
-    }
+    .centered-title { text-align: center; margin-bottom: 0px; font-weight: 700; }
+    .centered-subtitle { text-align: center; color: #666666; margin-top: -10px; margin-bottom: 5px; font-size: 1.15rem; font-weight: 500; }
+    .centered-painel { text-align: center; color: #2e7d32; margin-top: -5px; margin-bottom: 25px; font-size: 1.4rem; font-weight: 600; }
     .custom-card {
         padding: 20px;
         border-radius: 10px;
         border: 1px solid rgba(46, 125, 50, 0.2);
-        background-color: rgba(46, 125, 50, 0.02);
+        background-color: rgba(46, 125, 50, 0.01);
         margin-bottom: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Aplicação dos Títulos Centralizados Solicitados
-st.markdown('<h1 class="centered-title">🌱 Plataforma GreenConformity</h1>', unsafe_allow_html=True)
-st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
-st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformidade Ambiental e Certificação</p>', unsafe_allow_html=True)
-st.markdown("---")
-
-# Barra Lateral - Filtros de Governança Corporativa
-st.sidebar.header("🏢 Governança de Portfólio")
-obra_selecionada = st.sidebar.selectbox("Selecionar Canteiro de Obras:", ["Edifício Venâncio Eco-Efficient", "Complexo Logístico Alpha", "Residencial Solar Hub"])
-fase_obra = st.sidebar.radio("Fase Atual da Obra:", ["Estrutura", "Alvenaria/Acabamento", "Comissionamento"])
-
-# Dica de Tema na Sidebar
-st.sidebar.markdown("---")
-st.sidebar.caption("🌓 **Dica de Visualização:** Alterne entre Modo Claro e Escuro clicando nas configurações (⚙️) no canto superior direito da tela.")
-
-# 3. Dados de Engenharia Brutos (Volume m³)
+# 3. Processamento de Engenharia de Dados (Cálculos Base)
 dados_brutos = {
     'Mês': ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
     'Concreto (m³)': [8, 0, 1, 2, 10, 2, 1, 3, 1, 2, 0, 1],
@@ -69,95 +37,165 @@ dados_brutos = {
 }
 df_volume = pd.DataFrame(dados_brutos)
 
-# Fatores de Conversão de Densidade (Padrão LEED / EPA - Toneladas por m³)
-FAT_CONCRETO = 1.2  
-FAT_MADEIRA = 0.3  
-FAT_METAL = 0.5   
-FAT_URE = 0.4     
-
-# 4. Processamento de Engenharia: Convertendo para Toneladas (Exigência LEED)
+# Fatores de conversão padrão LEED (m³ para Toneladas)
 df_massa = pd.DataFrame()
 df_massa['Mês'] = df_volume['Mês']
-df_massa['Concreto (t)'] = df_volume['Concreto (m³)'] * FAT_CONCRETO
-df_massa['Madeira (t)'] = df_volume['Madeira (m³)'] * FAT_MADEIRA
-df_massa['Metais (t)'] = df_volume['Metais (m³)'] * FAT_METAL
-df_massa['Reciclado Total (t)'] = df_massa['Concreto (t)'] + df_massa['Madeira (t)'] + df_massa['Metais (t)']
-df_massa['URE / Aterro (t)'] = df_volume['URE / Não Reciclado (m³)'] * FAT_URE
-df_massa['Total Gerado (t)'] = df_massa['Reciclado Total (t)'] + df_massa['URE / Aterro (t)']
+df_massa['Reciclado Total (t)'] = (df_volume['Concreto (m³)'] * 1.2) + (df_volume['Madeira (m³)'] * 0.3) + (df_volume['Metais (m³)'] * 0.5)
+df_massa['URE / Aterro (t)'] = df_volume['URE / Não Reciclado (m³)'] * 0.4
+df_massa['Total (t)'] = df_massa['Reciclado Total (t)'] + df_massa['URE / Aterro (t)']
 
-# Variáveis Consolidadas para os KPIs
-t_reciclado = df_massa['Reciclado Total (t)'].sum()
-t_aterro = df_massa['URE / Aterro (t)'].sum()
-t_total = df_massa['Total Gerado (t)'].sum()
-taxa_desvio_leed = (t_reciclado / t_total) * 100 if t_total > 0 else 0
+# Cálculo das taxas de conformidade por módulo
+conf_residuos = (df_massa['Reciclado Total (t)'].sum() / df_massa['Total (t)'].sum()) * 100
+conf_energia = 78.5  # Simulação de eficiência vs ASHRAE 90.1
+conf_agua = 84.2     # Simulação de redução de água interna vs Baseline
+conf_transporte = 65.0 # Simulação de vagas e acessibilidade alternatva
 
-# 5. MÓDULO SUPERIOR: Indicadores de Alta Performance (Massa - Toneladas)
-with st.container():
-    st.markdown(f"### 📊 Balanço de Massa Auditado - {obra_selecionada}")
-    kpi1, kpi2, kpi3, kpi4 = st.columns(4)
+# Índice Global de Conformidade (Média dos módulos LEED)
+indice_global = (conf_residuos + conf_energia + conf_agua + conf_transporte) / 4
 
-    with kpi1:
-        st.metric(label="⚖️ Massa Total Gerada", value=f"{t_total:.2f} t")
-    with kpi2:
-        st.metric(label="♻️ Desvio de Aterro (LEED)", value=f"{taxa_desvio_leed:.1f}%", delta=f"{taxa_desvio_leed - 75.0:.1f}% vs Meta GBC")
-    with kpi3:
-        st.metric(label="🪵 Canais de Reciclagem Ativos", value="3 Fluxos", delta="Atende Prerequisito")
-    with kpi4:
-        st.metric(label="🎖️ Pontuação Estimada MR", value="2 Pontos", delta="Pontuação Máxima")
-
-    # Barra de Progresso
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.progress(int(taxa_desvio_leed) if taxa_desvio_leed <= 100 else 100)
+# 4. LAYOUT DA TELA: Cabeçalho e Títulos
+st.markdown('<h1 class="centered-title">🌱 Plataforma GreenConformity</h1>', unsafe_allow_html=True)
+st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
+st.markdown('<p class="centered-painel">Painel de Conformidade Ambiental e Certificação 601 Empreendimentos</p>', unsafe_allow_html=True)
 st.markdown("---")
 
-# 6. MÓDULO INFERIOR: Interface Dividida (Upload à Esquerda, Gráficos à Direita)
-col1, col2 = st.columns([1, 1], gap="large")
+# Barra Lateral - Filtros de Portfólio
+st.sidebar.header("🏢 Governança de Portfólio")
+obra_selecionada = st.sidebar.selectbox("Selecionar Canteiro de Obras:", ["Edifício Venâncio Eco-Efficient", "Complexo Logístico Alpha", "Residencial Solar Hub"])
+fase_obra = st.sidebar.radio("Fase Atual da Obra:", ["Estrutura", "Alvenaria/Acabamento", "Comissionamento"])
 
-with col1:
-    # Aplicando a classe custom-card para criar o contêiner visual de upload
-    st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-    st.markdown("### 📥 Gateway de Auditoria Automatizada (IA OCR)")
-    arquivo_subido = st.file_uploader("Arraste o lote de PDFs/MTRs fiscais da obra:", type=["pdf"])
-    
-    if arquivo_subido is not None:
-        if st.button("🔍 Executar Auditoria e Validação Digital"):
-            with st.spinner("Analisando assinaturas digitais, hash do documento e extraindo peso líquido..."):
-                time.sleep(2.5)
-            st.success("Documento Validado! Dados convertidos para Toneladas e integrados à Trilha de Auditoria.")
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Tabela de Rastreabilidade exigida pelo LEED
-    st.markdown("### 📜 Trilha de Evidências Rastreáveis")
-    evidencias = {
-        'Mês': ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
-        'Doc Origem': ['MTR_2024_019.pdf', 'MTR_2024_034.pdf', 'MTR_2024_051.pdf', 'MTR_2024_088.pdf', 'MTR_2024_112.pdf'],
-        'Status GBC': ['Aprovado', 'Aprovado', 'Aprovado', 'Em Análise', 'Revisar Alerta']
-    }
-    st.dataframe(pd.DataFrame(evidencias), use_container_width=True)
+# 5. BLOCO SUPERIOR: Divisão entre KPIs e o Gráfico de Arco (Velocímetro)
+topo_col1, topo_col2 = st.columns([2, 1])
 
-with col2:
-    st.markdown("### 📈 Curva Analítica de Resíduos Desviados (Massa)")
+with topo_col1:
+    st.markdown(f"### 📈 Scorecard Executivo - {obra_selecionada}")
+    k1, k2 = st.columns(2)
+    with k1:
+        st.metric(label="📊 Índice Global de Conformidade LEED", value=f"{indice_global:.1f}%", delta="Em evolução")
+    with k2:
+        st.metric(label="🎖️ Nível Estimado da Certificação", value="LEED Gold", delta="Faltam 4 pontos para Platinum")
     
-    # Customização do gráfico para se adaptar dinamicamente aos modos Claro e Escuro
-    fig, ax = plt.subplots(figsize=(10, 6.2))
-    # Definindo fundo transparente para herdar o tema do Streamlit
-    fig.patch.set_alpha(0.0)
-    ax.set_facecolor('none')
+    # Barra de Progresso Global
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.progress(int(indice_global))
+
+with topo_col2:
+    # Criação do Gráfico de Arco Lúdico (Gauge Chart) no topo direito
+    fig_gauge, ax_g = plt.subplots(figsize=(4, 2.2))
+    fig_gauge.patch.set_alpha(0.0)
+    ax_g.set_facecolor('none')
     
-    # Barras empilhadas
-    ax.bar(df_massa['Mês'], df_massa['Reciclado Total (t)'], color='#2e7d32', label='Desviado/Reciclado (t)', alpha=0.9)
-    ax.bar(df_massa['Mês'], df_massa['URE / Aterro (t)'], bottom=df_massa['Reciclado Total (t)'], color='#d32f2f', label='Aterro/URE (t)', alpha=0.9)
+    # Desenhar o semicírculo de fundo
+    angulos = np.linspace(0, np.pi, 100)
+    ax_g.plot(np.cos(angulos), np.sin(angulos), color='#e0e0e0', linewidth=18, solid_capstyle='round')
     
-    ax.set_ylabel('Massa Líquida (Toneladas)', color='gray')
-    ax.tick_params(colors='gray')
-    ax.grid(True, linestyle=':', alpha=0.3, color='gray')
-    ax.legend(loc='upper right', facecolor='none', edgecolor='gray')
+    # Desenhar o arco de preenchimento baseado no índice real
+    angulo_real = np.pi * (1 - (indice_global / 100))
+    angulos_preenchidos = np.linspace(np.pi, angulo_real, 100)
+    ax_g.plot(np.cos(angulos_preenchidos), np.sin(angulos_preenchidos), color='#2e7d32', linewidth=18, solid_capstyle='round')
     
-    # Remove bordas rígidas do gráfico para um visual moderno
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-        
-    st.pyplot(fig)
+    # Estilização do texto central do Arco
+    ax_g.text(0, 0.1, f"{indice_global:.0f}%", fontsize=24, fontweight='bold', ha='center', va='center', color='#2e7d32')
+    ax_g.text(0, -0.2, "Conformidade", fontsize=10, color='gray', ha='center', va='center')
+    
+    ax_g.set_xlim(-1.2, 1.2)
+    ax_g.set_ylim(-0.3, 1.2)
+    ax_g.axis('off')
+    st.pyplot(fig_gauge)
+
+st.markdown("---")
+
+# 6. ENGINE DE RISCO: Alertas de Baixa Conformidade Integrados
+st.markdown("### ⚠️ Central de Alertas e Desvios Operacionais")
+alertas_col1, alertas_col2, alertas_col3 = st.columns(3)
+
+with alertas_col1:
+    if conf_transporte < 70:
+        st.error(f"🚨 **Crítico - Transporte ({conf_transporte:.0f}%)**:\n\nA infraestrutura de vagas preferenciais e bicicletários está abaixo da meta mínima estipulada pelo crédito LT. Risco de perda de ponto.")
+
+with alertas_col2:
+    # Varredura inteligente nos dados de resíduos (Procura picos críticos de URE)
+    mes_critico_ure = df_volume.loc[df_volume['URE / Não Reciclado (m³)'] > 25, 'Mês'].values[0]
+    st.warning(f"⚠️ **Alerta - Resíduos (Mês de {mes_critico_ure})**:\n\nIdentificado pico anômalo de resíduos não recicláveis enviados para aterro. Necessário auditar as Notas Fiscais de destino final.")
+
+with alertas_col3:
+    st.success(f"✅ **Eficiência - Água ({conf_agua:.1f}%)**:\n\nA conformidade das medições de hidrômetros aponta que a obra segue firme nos pré-requisitos de redução de consumo.")
+
+st.markdown("---")
+
+# 7. MÓDULOS DOS ITENS DE CONFORMIDADE LEED (Abas Dinâmicas)
+st.markdown("### 🗂️ Módulos de Gestão Técnica")
+aba_residuos, aba_energia, aba_agua, aba_transporte = st.tabs(["♻️ Resíduos (MR)", "⚡ Energia (EA)", "💧 Água (WE)", "🚗 Transporte (LT)"])
+
+# ABA RESÍDUOS
+with aba_residuos:
+    col_r1, col_r2 = st.columns(2)
+    with col_r1:
+        st.markdown("#### Upload de Evidências Fiscais")
+        arquivo_subido = st.file_uploader("Arraste MTRs ou Certificados de Destinação Final (CDF):", type=["pdf"], key="res_up")
+        st.markdown("#### Trilha de Evidências Rastreáveis")
+        evidencias = {
+            'Mês': ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
+            'Doc Origem': ['MTR_2024_019.pdf', 'MTR_2024_034.pdf', 'MTR_2024_051.pdf', 'MTR_2024_088.pdf', 'MTR_2024_112.pdf'],
+            'Status Auditoria': ['Aprovado', 'Aprovado', 'Aprovado', 'Em Análise', 'Alerta Emissão']
+        }
+        st.dataframe(pd.DataFrame(evidencias), use_container_width=True)
+    with col_r2:
+        st.markdown("#### Balanço Mensal de Massa (Toneladas)")
+        fig_r, ax_r = plt.subplots(figsize=(10, 5))
+        fig_r.patch.set_alpha(0.0)
+        ax_r.set_facecolor('none')
+        ax_r.bar(df_massa['Mês'], df_massa['Reciclado Total (t)'], color='#2e7d32', label='Desviado/Reciclado (t)')
+        ax_r.bar(df_massa['Mês'], df_massa['URE / Aterro (t)'], bottom=df_massa['Reciclado Total (t)'], color='#d32f2f', label='Aterro/URE (t)')
+        ax_r.set_ylabel('Toneladas (t)', color='gray')
+        ax_r.tick_params(colors='gray')
+        ax_r.legend()
+        st.pyplot(fig_r)
+
+# ABA ENERGIA
+with aba_energia:
+    col_e1, col_e2 = st.columns(2)
+    with col_e1:
+        st.markdown("#### Gestão de Eficiência Energética Canteiro / Comissionamento")
+        st.write("Monitoramento de consumo das faturas elétricas frente à linha de base (Baseline ASHRAE 90.1).")
+        st.metric(label="⚡ Consumo Acumulado", value="42.850 kWh", delta="-5.2% vs Canteiro Padrão")
+        st.metric(label="🌱 Pegada de Carbono (Escopo 2)", value="3,62 tCO2e", delta="Otimizado por Grid Renovável")
+    with col_e2:
+        st.markdown("#### Gráfico de Demanda Elétrica Mensal")
+        dados_energia = pd.DataFrame({'Mês': df_volume['Mês'], 'Consumo (kWh)': [3500, 3200, 4100, 4500, 5200, 4800, 4100, 3900, 3800, 4200, 3100, 2900]})
+        st.line_chart(dados_energia.set_index('Mês'), color="#fbc02d")
+
+# ABA ÁGUA
+with aba_agua:
+    col_w1, col_w2 = st.columns(2)
+    with col_w1:
+        st.markdown("#### Eficiência de Água (Indoor and Outdoor Water Reduction)")
+        st.write("Acompanhamento das metas globais do pré-requisito e crédito WE.")
+        st.metric(label="💧 Consumo de Água Potável", value="184 m³", delta="32% de Redução Adquirida")
+        st.info("💡 **Diretriz LEED:** Meta de redução sustentada através do uso combinado de torneiras de baixa vazão e captação de água pluvial instalada na torre principal.")
+    with col_w2:
+        st.markdown("#### Distribuição de Consumo por Subsistema")
+        labels = ['Louças/Metais', 'Processos Obra', 'Perdas/Limpeza']
+        tamanhos = [55, 30, 15]
+        fig_w, ax_w = plt.subplots(figsize=(6, 4))
+        fig_w.patch.set_alpha(0.0)
+        ax_w.pie(tamanhos, labels=labels, autopct='%1.1f%%', colors=['#0288d1', '#4fc3f7', '#b3e5fc'], textprops={'color': 'gray'})
+        st.pyplot(fig_w)
+
+# ABA TRANSPORTE
+with aba_transporte = st.tabs(["🚗 Transporte (LT)"])[0]:  # Correção interna de carregamento de contexto
+    st.markdown("#### Localização e Transporte (Access to Quality Transit & Green Vehicles)")
+    st.write("Verificação física de conformidade para atendimento do crédito de redução de uso de veículos individuais.")
+    col_t1, col_t2 = st.columns(2)
+    with col_t1:
+        st.data_editor({
+            "Item de Controle": ["Vagas para Veículos Elétricos (EV)", "Eletropostos Ativos c/ Fiação", "Vagas Carona Solidária (Carpool)", "Bicicletário Coberto"],
+            "Quantidade Exigida": [5, 2, 8, 20],
+            "Instalado em Canteiro": [3, 2, 4, 20],
+            "Status de Auditoria": ["Pendente (Abaixo)", "Conforme", "Pendente (Abaixo)", "Conforme"]
+        }, use_container_width=True)
+    with col_t2:
+        st.info("🛠️ **Ação Corretiva do Consultor:** A demarcação de vagas para carona solidária e veículos de baixa emissão precisa ser concluída antes da fase de vistorias finais sob risco de glosa de créditos pelo revisor do GBC.")
 
 # Rodapé de Conformidade
 st.markdown("---")
