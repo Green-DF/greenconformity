@@ -183,7 +183,7 @@ with aba_agua:
         st.pyplot(fig_w)
 
 # ABA TRANSPORTE
-with aba_transporte = st.tabs(["🚗 Transporte (LT)"])[0]:  # Correção interna de carregamento de contexto
+with aba_transporte:
     st.markdown("#### Localização e Transporte (Access to Quality Transit & Green Vehicles)")
     st.write("Verificação física de conformidade para atendimento do crédito de redução de uso de veículos individuais.")
     col_t1, col_t2 = st.columns(2)
@@ -193,7 +193,7 @@ with aba_transporte = st.tabs(["🚗 Transporte (LT)"])[0]:  # Correção intern
             "Quantidade Exigida": [5, 2, 8, 20],
             "Instalado em Canteiro": [3, 2, 4, 20],
             "Status de Auditoria": ["Pendente (Abaixo)", "Conforme", "Pendente (Abaixo)", "Conforme"]
-        }, use_container_width=True)
+        }, use_container_width=True, key="transporte_editor")
     with col_t2:
         st.info("🛠️ **Ação Corretiva do Consultor:** A demarcação de vagas para carona solidária e veículos de baixa emissão precisa ser concluída antes da fase de vistorias finais sob risco de glosa de créditos pelo revisor do GBC.")
 
