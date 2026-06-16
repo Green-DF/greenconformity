@@ -162,4 +162,7 @@ with col2:
 # Rodapé de Conformidade
 st.markdown("---")
 st.caption("🔒 Certificação de Dados: GreenConformity segue as diretrizes do LEED BD+C v4/v4.1. Dados protegidos por chaves corporativas privadas de criptografia.")
-git pull origin modulo-leed
+
+git add app.py
+git commit -m "Fix: Resolvendo conflitos de histórico"
+git push origin modulo-leed
