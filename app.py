@@ -9,6 +9,53 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+# 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Visão de Governança de Portfólio)
+st.markdown("---")
+st.markdown("### 🏛️ Matriz Geral de Créditos - LEED BD+C v4")
+st.markdown("Selecione as categorias abaixo para expandir os indicadores e requisitos de cada disciplina:")
+
+# Criação das abas para as 9 categorias oficiais do LEED v4
+abas_leed = st.tabs([
+    "IP (Processo)", 
+    "LT (Localização)", 
+    "SS (Terrenos)", 
+    "WE (Água)", 
+    "EA (Energia)", 
+    "MR (Materiais)", 
+    "EQ (Qualidade Interna)", 
+    "IN (Inovação)", 
+    "RP (Prioridade)"
+])
+
+# Conteúdo interno de cada aba (Pronto para receber futuros gráficos e inputs)
+with abas_leed[0]:
+    st.info("💡 *Integrative Process (IP):* Relatórios de sinergia entre as disciplinas (Energia e Água) na fase de pré-projeto.")
+
+with abas_leed[1]:
+    st.info("🚲 *Location and Transportation (LT):* Indicadores de densidade do entorno, acesso a transporte de qualidade e infraestrutura para bicicletas.")
+
+with abas_leed[2]:
+    st.info("🌳 *Sustainable Sites (SS):* Controle de prevenção de poluição na obra (Plano ESC), ilhas de calor e gestão de águas pluviais no canteiro.")
+
+with abas_leed[3]:
+    st.info("💧 *Water Efficiency (WE):* Medição de redução do consumo de água interna/externa e submedição de hidrômetros temporários.")
+
+with abas_leed[4]:
+    st.info("⚡ *Energy and Atmosphere (EA):* Comissionamento de sistemas, eficiência energética dos alojamentos e gestão de fluidos refrigerantes.")
+
+with abas_leed[5]:
+    st.success("♻️ *Materials and Resources (MR):* A gestão de resíduos e desvio de aterro já está ativa e sendo monitorada no painel de balanço de massa acima.")
+
+with abas_leed[6]:
+    st.info("🌬️ *Indoor Environmental Quality (EQ):* Plano de gestão da qualidade do ar (IAQ) durante a construção e controle de tintas/selantes (VOCs).")
+
+with abas_leed[7]:
+    st.info("🚀 *Innovation (IN):* Estratégias de design inovador e superação de metas (Ex: Desvio de aterro atingindo status de performance exemplar).")
+
+with abas_leed[8]:
+    st.info("🗺️ *Regional Priority (RP):* Créditos de bônus ativados com base nas coordenadas geográficas e prioridades ambientais da região.")
+
+st.markdown("<br>", unsafe_allow_html=True) # Espaçamento visual para o rodapé
 
 # 2. Injeção de CSS para Centralização de Títulos e Estilização de Cartões
 st.markdown("""
@@ -162,50 +209,3 @@ with col2:
 # Rodapé de Conformidade
 st.markdown("---")
 st.caption("🔒 Certificação de Dados: GreenConformity segue as diretrizes do LEED BD+C v4/v4.1. Dados protegidos por chaves corporativas privadas de criptografia.")
-# 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Visão de Governança de Portfólio)
-st.markdown("---")
-st.markdown("### 🏛️ Matriz Geral de Créditos - LEED BD+C v4")
-st.markdown("Selecione as categorias abaixo para expandir os indicadores e requisitos de cada disciplina:")
-
-# Criação das abas para as 9 categorias oficiais do LEED v4
-abas_leed = st.tabs([
-    "IP (Processo)", 
-    "LT (Localização)", 
-    "SS (Terrenos)", 
-    "WE (Água)", 
-    "EA (Energia)", 
-    "MR (Materiais)", 
-    "EQ (Qualidade Interna)", 
-    "IN (Inovação)", 
-    "RP (Prioridade)"
-])
-
-# Conteúdo interno de cada aba (Pronto para receber futuros gráficos e inputs)
-with abas_leed[0]:
-    st.info("💡 *Integrative Process (IP):* Relatórios de sinergia entre as disciplinas (Energia e Água) na fase de pré-projeto.")
-
-with abas_leed[1]:
-    st.info("🚲 *Location and Transportation (LT):* Indicadores de densidade do entorno, acesso a transporte de qualidade e infraestrutura para bicicletas.")
-
-with abas_leed[2]:
-    st.info("🌳 *Sustainable Sites (SS):* Controle de prevenção de poluição na obra (Plano ESC), ilhas de calor e gestão de águas pluviais no canteiro.")
-
-with abas_leed[3]:
-    st.info("💧 *Water Efficiency (WE):* Medição de redução do consumo de água interna/externa e submedição de hidrômetros temporários.")
-
-with abas_leed[4]:
-    st.info("⚡ *Energy and Atmosphere (EA):* Comissionamento de sistemas, eficiência energética dos alojamentos e gestão de fluidos refrigerantes.")
-
-with abas_leed[5]:
-    st.success("♻️ *Materials and Resources (MR):* A gestão de resíduos e desvio de aterro já está ativa e sendo monitorada no painel de balanço de massa acima.")
-
-with abas_leed[6]:
-    st.info("🌬️ *Indoor Environmental Quality (EQ):* Plano de gestão da qualidade do ar (IAQ) durante a construção e controle de tintas/selantes (VOCs).")
-
-with abas_leed[7]:
-    st.info("🚀 *Innovation (IN):* Estratégias de design inovador e superação de metas (Ex: Desvio de aterro atingindo status de performance exemplar).")
-
-with abas_leed[8]:
-    st.info("🗺️ *Regional Priority (RP):* Créditos de bônus ativados com base nas coordenadas geográficas e prioridades ambientais da região.")
-
-st.markdown("<br>", unsafe_allow_html=True) # Espaçamento visual para o rodapé
