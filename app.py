@@ -101,6 +101,7 @@ with abas_leed[8]:
 st.sidebar.header("🏢 Governança de Portfólio")
 obra_selecionada = st.sidebar.selectbox("Selecionar Canteiro de Obras:", ["Edifício Venâncio Eco-Efficient", "Complexo Logístico Alpha", "Residencial Solar Hub"])
 fase_obra = st.sidebar.radio("Fase Atual da Obra:", ["Estrutura", "Alvenaria/Acabamento", "Comissionamento"])
+st.markdown("<br>", unsafe_allow_html=True) # Espaçamento visual para o rodapé
 
 # Dica de Tema na Sidebar
 st.sidebar.markdown("---")
