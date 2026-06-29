@@ -9,6 +9,47 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# 2. Injeção de CSS para Centralização de Títulos e Estilização de Cartões
+st.markdown("""
+    <style>
+    .centered-title {
+        text-align: center;
+        margin-bottom: 0px;
+        font-weight: 700;
+    }
+    .centered-subtitle {
+        text-align: center;
+        color: #666666;
+        margin-top: -10px;
+        margin-bottom: 5px;
+        font-size: 1.15rem;
+        font-weight: 500;
+    }
+    .centered-painel {
+        text-align: center;
+        color: #2e7d32;
+        margin-top: -5px;
+        margin-bottom: 25px;
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+    .custom-card {
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid rgba(46, 125, 50, 0.2);
+        background-color: rgba(46, 125, 50, 0.02);
+        margin-bottom: 20px;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Aplicação dos Títulos Centralizados Solicitados
+st.markdown('<h1 class="centered-title">🌱 Plataforma GreenConformity</h1>', unsafe_allow_html=True)
+st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
+st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformidade Ambiental e Certificação</p>', unsafe_allow_html=True)
+st.markdown("---")
+
 # 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Visão de Governança de Portfólio)
 st.markdown("---")
 st.markdown("### 🏛️ Matriz Geral de Créditos - LEED BD+C v4")
@@ -56,46 +97,6 @@ with abas_leed[8]:
     st.info("🗺️ *Regional Priority (RP):* Créditos de bônus ativados com base nas coordenadas geográficas e prioridades ambientais da região.")
 
 st.markdown("<br>", unsafe_allow_html=True) # Espaçamento visual para o rodapé
-
-# 2. Injeção de CSS para Centralização de Títulos e Estilização de Cartões
-st.markdown("""
-    <style>
-    .centered-title {
-        text-align: center;
-        margin-bottom: 0px;
-        font-weight: 700;
-    }
-    .centered-subtitle {
-        text-align: center;
-        color: #666666;
-        margin-top: -10px;
-        margin-bottom: 5px;
-        font-size: 1.15rem;
-        font-weight: 500;
-    }
-    .centered-painel {
-        text-align: center;
-        color: #2e7d32;
-        margin-top: -5px;
-        margin-bottom: 25px;
-        font-size: 1.4rem;
-        font-weight: 600;
-    }
-    .custom-card {
-        padding: 20px;
-        border-radius: 10px;
-        border: 1px solid rgba(46, 125, 50, 0.2);
-        background-color: rgba(46, 125, 50, 0.02);
-        margin-bottom: 20px;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-# Aplicação dos Títulos Centralizados Solicitados
-st.markdown('<h1 class="centered-title">🌱 Plataforma GreenConformity</h1>', unsafe_allow_html=True)
-st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
-st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformidade Ambiental e Certificação</p>', unsafe_allow_html=True)
-st.markdown("---")
 
 # Barra Lateral - Filtros de Governança Corporativa
 st.sidebar.header("🏢 Governança de Portfólio")
