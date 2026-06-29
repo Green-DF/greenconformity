@@ -48,7 +48,6 @@ st.markdown("""
 st.markdown('<h1 class="centered-title">🌱 Plataforma GreenConformity</h1>', unsafe_allow_html=True)
 st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
 st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformidade Ambiental e Certificação</p>', unsafe_allow_html=True)
-st.markdown("---")
 
 # 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Visão de Governança de Portfólio)
 st.markdown("---")
@@ -95,7 +94,7 @@ with abas_leed[7]:
 
 with abas_leed[8]:
     st.info("🗺️ *Regional Priority (RP):* Créditos de bônus ativados com base nas coordenadas geográficas e prioridades ambientais da região.")
-
+st.markdown("---")
 
 # Barra Lateral - Filtros de Governança Corporativa
 st.sidebar.header("🏢 Governança de Portfólio")
