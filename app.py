@@ -48,41 +48,90 @@ st.markdown("""
 st.markdown('<h1 class="centered-title">🌱 Plataforma GreenConformity</h1>', unsafe_allow_html=True)
 st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
 st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformidade Ambiental e Certificação</p>', unsafe_allow_html=True)
-# 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Evoluído para Gestão de Performance)
+# 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Visão de Governança e Compliance)
 st.markdown("---")
 st.markdown("### 🏛️ Matriz de Governança de Créditos - LEED BD+C v4")
+st.markdown("Painel de auditoria de requisitos e coleta de evidências para a certificação do ativo:")
 
-# Definindo as abas
-abas_leed = st.tabs(["IP", "LT", "SS", "WE", "EA", "MR", "EQ", "IN", "RP"])
+# Criação das abas para as 9 categorias oficiais
+abas_leed = st.tabs([
+    "IP (Processo)", 
+    "LT (Localização)", 
+    "SS (Terrenos)", 
+    "WE (Água)", 
+    "EA (Energia)", 
+    "MR (Materiais)", 
+    "EQ (Qualidade Interna)", 
+    "IN (Inovação)", 
+    "RP (Prioridade)"
+])
 
-# Função para exibir o conteúdo estruturado dentro de cada aba
-def renderizar_aba(titulo, meta_investida, gasto_atual, status_cert):
-    st.markdown(f"#### 🎯 {titulo}")
-    
-    # Gráfico de Pizza de Status de Certificação
-    fig, ax = plt.subplots(figsize=(4, 2))
-    labels = ['Gold', 'Silver', 'Platinum']
-    sizes = [40, 30, 30] # Exemplo de distribuição de conformidade
-    ax.pie(sizes, labels=labels, autopct='%1.1f%%', colors=['#FFD700', '#C0C0C0', '#E5E4E2'])
-    st.pyplot(fig)
-    
-    # Expander para esconder o conteúdo
-    with st.expander("📂 Gerenciar Requisitos e Documentação"):
-        st.file_uploader(f"Upload de Evidências: {titulo}", type=["pdf", "docx"], key=f"up_{titulo}")
-        st.checkbox(f"✔️ Validar requisitos mandatórios para {titulo}", key=f"check_{titulo}")
-    
-    # Acompanhamento Financeiro
-    st.write(f"*💰 Orçamento da Categoria:* R$ {gasto_atual:,.2f} / R$ {meta_investida:,.2f}")
-    st.progress(gasto_atual / meta_investida if meta_investida > 0 else 0)
+with abas_leed[0]:
+    st.markdown("#### 🤝 Processo Integrativo")
+    st.caption("Documentação de Sinergia na Fase de Projeto")
+    st.checkbox("✔️ Relatório de Sinergia de Energia Concluído (Obrigatório)", value=True)
+    st.checkbox("✔️ Relatório de Sinergia de Água Concluído (Obrigatório)", value=True)
+    st.button("📄 Gerar Termo de Abertura do Projeto (OPR)")
 
-# Renderização das abas (Exemplo para SS e MR)
-with abas_leed[2]: # SS
-    renderizar_aba("Terrenos Sustentáveis (SS)", 50000, 32000, "Gold")
+with abas_leed[1]:
+    st.markdown("#### 🚲 Localização e Transporte")
+    st.caption("Infraestrutura de Baixo Carbono")
+    st.slider("Densidade do Entorno (Interseções num raio de 1km²)", min_value=0, max_value=500, value=150)
+    st.number_input("Vagas Físicas para Bicicletas no Empreendimento", min_value=0, value=12)
 
-with abas_leed[5]: # MR
-    renderizar_aba("Materiais e Recursos (MR)", 120000, 85000, "Platinum")
+with abas_leed[2]:
+    st.markdown("#### 🌳 Terrenos Sustentáveis")
+    st.warning("⚖️ Risco Jurídico: O Plano ESC é exigência de licenciamento e pré-requisito LEED.")
+    st.file_uploader("Anexar Relatório Fotográfico Semanal de Prevenção de Poluição (ESC)", type=["pdf"])
+    col_ss1, col_ss2 = st.columns(2)
+    with col_ss1:
+        st.checkbox("Inspeção de Lava-Rodas Realizada")
+    with col_ss2:
+        st.checkbox("Proteção de Bocas de Lobo Ativa")
 
-# Nota: Replique a chamada 'renderizar_aba' para as outras abas conforme necessário.
+with abas_leed[3]:
+    st.markdown("#### 💧 Eficiência Hídrica")
+    st.caption("Monitoramento de Consumo e Redução")
+    st.metric(label="Desempenho de Redução Hídrica (Design)", value="38%", delta="Meta Base: >20%")
+    st.progress(38)
+    st.checkbox("Submedidores Temporários Instalados no Canteiro")
+
+with abas_leed[4]:
+    st.markdown("#### ⚡ Energia e Atmosfera")
+    st.caption("Comissionamento e Proteção da Camada de Ozônio")
+    st.selectbox("Status do Comissionamento Fundamental (CxA):", ["Não Iniciado", "Em Andamento (Revisão de Projeto)", "Em Campo", "Concluído"])
+    st.checkbox("Zero Uso de CFCs em Equipamentos de Alojamento", value=True)
+
+with abas_leed[5]:
+    st.success("♻️ A auditoria de desvio de aterro e balanço de massa está ativa no painel superior desta tela.")
+    st.markdown("#### 📦 Declarações Ambientais de Produto (EPD / HPD)")
+    st.number_input("Quantidade de Materiais com Certificado EPD/FSC Verificado", min_value=0, value=14)
+
+with abas_leed[6]:
+    st.markdown("#### 🌬️ Qualidade Ambiental Interna")
+    st.caption("Proteção da Saúde Ocupacional e Futuros Ocupantes")
+    st.multiselect(
+        "Rastreabilidade de Materiais de Baixo VOC (Fichas FISPQ aprovadas):", 
+        ["Tinta Epóxi Piso", "Selante Poliuretano (PU)", "Adesivo para Madeira", "Verniz Base Água", "Gesso Acartonado"], 
+        default=["Tinta Epóxi Piso", "Selante Poliuretano (PU)"]
+    )
+
+with abas_leed[7]:
+    st.markdown("#### 🚀 Inovação em Design")
+    st.caption("Estratégias para Superação de Metas")
+    st.text_area(
+        "Registro de Performance Exemplar (Ex: Desvio de aterro atingindo 95%+):", 
+        "A Venâncio Empreendimentos atingiu a meta excepcional de..."
+    )
+        
+with abas_leed[8]:
+    st.markdown("#### 🗺️ Prioridade Regional")
+    st.caption("Bônus de Certificação Específicos para a Coordenada Geográfica")
+    st.selectbox(
+        "Selecione o Crédito de Prioridade Regional Atingido:", 
+        ["Nenhum", "WEc: Redução de Uso de Água Externa", "EAc: Otimização de Performance Energética", "SSc: Gestão de Águas Pluviais"]
+    )
+
 
 st.markdown("<br><br>", unsafe_allow_html=True)
 # Barra Lateral - Filtros de Governança Corporativa
