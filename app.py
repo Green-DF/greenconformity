@@ -96,7 +96,6 @@ with abas_leed[7]:
 with abas_leed[8]:
     st.info("🗺️ *Regional Priority (RP):* Créditos de bônus ativados com base nas coordenadas geográficas e prioridades ambientais da região.")
 
-st.markdown("<br>", unsafe_allow_html=True) # Espaçamento visual para o rodapé
 
 # Barra Lateral - Filtros de Governança Corporativa
 st.sidebar.header("🏢 Governança de Portfólio")
