@@ -51,10 +51,8 @@ st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformi
 import streamlit as st
 
 # --- MÓDULO ARC-INSPIRED: ENGINE DE SCORE DE PERFORMANCE ---
-st.markdown("---")
-col_arc1, col_arc2, col_arc3 = st.columns([1, 2, 1])
 
-with col_arc2:
+# 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Visão de Governança e Compliance)
     st.markdown("### 🎯 Score de Performance GreenConformity (ARC-Engine)")
     # Simulação de Score Dinâmico (Média ponderada das categorias)
     score_atual = 78.5
