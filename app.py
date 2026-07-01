@@ -51,18 +51,18 @@ st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformi
 import streamlit as st
 
 # --- MÓDULO ARC-INSPIRED: ENGINE DE SCORE DE PERFORMANCE ---
+st.markdown("---")
+col_arc1, col_arc2, col_arc3 = st.columns([1, 2, 1])
+
+with col_arc2:
+    st.markdown("### 🎯 Score de Performance GreenConformity (ARC-Engine)")
     score_atual = 78.5
     st.metric(label="Pontuação Geral de Certificação", value=f"{score_atual} pts", delta="+2.5 vs último mês")
     st.progress(score_atual / 100)
     st.caption("Acompanhamento contínuo baseado nas diretrizes LEED v4.1 O+M")
 
-# 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Evoluído para Gestão de Performance)
-st.markdown("---") # Apenas uma linha divisória para separar os módulos
-st.markdown("### 🏛️ Matriz de Governança de Créditos - LEED BD+C v4")
-
-# Configuração das categorias e seus orçamentos (Exemplos)
-
-categorias = {
+# 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Visão de Governança e Compliance)
+st.markdown("---")
     "Integrative Process (IP)": {"budget": 10000, "spent": 4000, "cert": {'Gold': 50, 'Silver': 30, 'Platinum': 20}},
     "Location and Transportation (LT)": {"budget": 20000, "spent": 12000, "cert": {'Gold': 40, 'Silver': 40, 'Platinum': 20}},
     "Sustainable Sites (SS)": {"budget": 50000, "spent": 32000, "cert": {'Gold': 30, 'Silver': 30, 'Platinum': 40}},
