@@ -51,6 +51,7 @@ st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformi
 import streamlit as st
 
 # --- MÓDULO ARC-INSPIRED: ENGINE DE SCORE DE PERFORMANCE ---
+# --- MÓDULO ARC-INSPIRED: ENGINE DE SCORE DE PERFORMANCE ---
 st.markdown("---")
 col_arc1, col_arc2, col_arc3 = st.columns([1, 2, 1])
 
@@ -60,7 +61,6 @@ with col_arc2:
     st.metric(label="Pontuação Geral de Certificação", value=f"{score_atual} pts", delta="+2.5 vs último mês")
     st.progress(score_atual / 100)
     st.caption("Acompanhamento contínuo baseado nas diretrizes LEED v4.1 O+M")
-
 # 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Visão de Governança e Compliance)
 st.markdown("---")
     "Integrative Process (IP)": {"budget": 10000, "spent": 4000, "cert": {'Gold': 50, 'Silver': 30, 'Platinum': 20}},
