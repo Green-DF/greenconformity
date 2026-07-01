@@ -48,6 +48,49 @@ st.markdown("""
 st.markdown('<h1 class="centered-title">🌱 Plataforma GreenConformity</h1>', unsafe_allow_html=True)
 st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
 st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformidade Ambiental e Certificação</p>', unsafe_allow_html=True)
+# =====================================================================
+# INJEÇÃO EXCLUSIVA: MÓDULO ARC-INSPIRED (CENTRAL DE INTELIGÊNCIA)
+# =====================================================================
+st.markdown("---")
+st.markdown("### 🌐 ARC Engine: Central de Performance em Tempo Real")
+st.caption("Visão macro de governança baseada nas 5 dimensões globais do ARC GBCI.")
+
+# 1. Visão Global (Performance Score Centralizado)
+col_score1, col_score2, col_score3 = st.columns([1, 2, 1])
+
+with col_score2:
+    # Utilizando o custom-card que você já criou no CSS para destacar o Score
+    st.markdown('<div class="custom-card" style="text-align: center;">', unsafe_allow_html=True)
+    st.markdown("<h4 style='color: #666666; margin-bottom: 0;'>Performance Score Global</h4>", unsafe_allow_html=True)
+    st.markdown("<h1 style='font-size: 4.5rem; color: #2e7d32; margin: -10px 0px;'>78</h1>", unsafe_allow_html=True)
+    st.caption("🎯 Projeção Atual: Nível Ouro (Gold)")
+    st.progress(78)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# 2. Desmembramento nas 5 Categorias Oficiais do ARC
+st.markdown("#### 📊 Tracking Multidimensional (Core Metrics)")
+arc_c1, arc_c2, arc_c3, arc_c4, arc_c5 = st.columns(5)
+
+arc_c1.metric(label="⚡ Energia", value="22/33 pts", delta="Estável", delta_color="off")
+arc_c2.metric(label="💧 Água", value="12/15 pts", delta="+2 pts", delta_color="normal")
+arc_c3.metric(label="♻️ Resíduos", value="6/8 pts", delta="Auditoria Ativa", delta_color="normal")
+arc_c4.metric(label="🚲 Transporte", value="9/14 pts", delta="-1 pt (Alerta)", delta_color="inverse")
+arc_c5.metric(label="👥 Exp. Humana", value="15/20 pts", delta="Conforme", delta_color="off")
+
+# 3. Análise Longitudinal (Histórico de Tendência do ARC)
+st.markdown("<br>", unsafe_allow_html=True)
+with st.expander("📈 Expandir Curva de Evolução Longitudinal (Últimos 6 meses)"):
+    st.write("Monitoramento contínuo da pontuação para evitar depreciação do ativo:")
+    # Base de dados simulada para o gráfico de tendência
+    df_arc_trend = pd.DataFrame({
+        'Mês': ['Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
+        'Score Global': [62, 65, 70, 72, 75, 78]
+    })
+    # Gráfico de linha puro e rápido, padrão analítico
+    st.line_chart(df_arc_trend.set_index('Mês'), height=250)
+# =====================================================================
+# FIM DA INJEÇÃO DO MÓDULO ARC
+# =====================================================================
 # 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Visão de Governança e Compliance)
 st.markdown("---")
 st.markdown("### 🏛️ Matriz de Governança de Créditos - LEED BD+C v4")
