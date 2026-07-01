@@ -48,9 +48,7 @@ st.markdown("""
 st.markdown('<h1 class="centered-title">🌱 Plataforma GreenConformity</h1>', unsafe_allow_html=True)
 st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
 st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformidade Ambiental e Certificação</p>', unsafe_allow_html=True)
-import streamlit as st
 
-# --- MÓDULO ARC-INSPIRED: ENGINE DE SCORE DE PERFORMANCE ---
 # --- MÓDULO ARC-INSPIRED: ENGINE DE SCORE DE PERFORMANCE ---
 st.markdown("---")
 col_arc1, col_arc2, col_arc3 = st.columns([1, 2, 1])
