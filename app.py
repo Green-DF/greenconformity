@@ -48,94 +48,54 @@ st.markdown("""
 st.markdown('<h1 class="centered-title">🌱 Plataforma GreenConformity</h1>', unsafe_allow_html=True)
 st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
 st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformidade Ambiental e Certificação</p>', unsafe_allow_html=True)
-import streamlit as st
 
-# ==============================================================================
-# --- MÓDULO ARC-INSPIRED: ENGINE DE SCORE DE PERFORMANCE ---
-# ==============================================================================
+# 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Visão de Governança de Portfólio)
 st.markdown("---")
-col_arc1, col_arc2, col_arc3 = st.columns([1, 2, 1])
+st.markdown("### 🏛️ Matriz Geral de Créditos - LEED BD+C v4")
+st.markdown("Selecione as categorias abaixo para expandir os indicadores e requisitos de cada disciplina:")
 
-with col_arc2:
-    st.markdown("### 🎯 Score de Performance GreenConformity (ARC-Engine)")
-    
-    # Simulação de Score Dinâmico (Média ponderada das categorias)
-    score_atual = 78.5
-    
-    st.metric(
-        label="Pontuação Geral de Certificação", 
-        value=f"{score_atual} pts", 
-        delta="+2.5 vs último mês"
-    )
-    
-    st.progress(score_atual / 100)
-    st.caption("Acompanhamento contínuo baseado nas diretrizes LEED v4.1 O+M")
+# Criação das abas para as 9 categorias oficiais do LEED v4
+abas_leed = st.tabs([
+    "IP (Processo)", 
+    "LT (Localização)", 
+    "SS (Terrenos)", 
+    "WE (Água)", 
+    "EA (Energia)", 
+    "MR (Materiais)", 
+    "EQ (Qualidade Interna)", 
+    "IN (Inovação)", 
+    "RP (Prioridade)"
+])
 
+# Conteúdo interno de cada aba (Pronto para receber futuros gráficos e inputs)
+with abas_leed[0]:
+    st.info("💡 *Integrative Process (IP):* Relatórios de sinergia entre as disciplinas (Energia e Água) na fase de pré-projeto.")
 
-# ==============================================================================
-# 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Visão de Governança e Compliance)
-# ==============================================================================
+with abas_leed[1]:
+    st.info("🚲 *Location and Transportation (LT):* Indicadores de densidade do entorno, acesso a transporte de qualidade e infraestrutura para bicicletas.")
+
+with abas_leed[2]:
+    st.info("🌳 *Sustainable Sites (SS):* Controle de prevenção de poluição na obra (Plano ESC), ilhas de calor e gestão de águas pluviais no canteiro.")
+
+with abas_leed[3]:
+    st.info("💧 *Water Efficiency (WE):* Medição de redução do consumo de água interna/externa e submedição de hidrômetros temporários.")
+
+with abas_leed[4]:
+    st.info("⚡ *Energy and Atmosphere (EA):* Comissionamento de sistemas, eficiência energética dos alojamentos e gestão de fluidos refrigerantes.")
+
+with abas_leed[5]:
+    st.success("♻️ *Materials and Resources (MR):* A gestão de resíduos e desvio de aterro já está ativa e sendo monitorada no painel de balanço de massa acima.")
+
+with abas_leed[6]:
+    st.info("🌬️ *Indoor Environmental Quality (EQ):* Plano de gestão da qualidade do ar (IAQ) durante a construção e controle de tintas/selantes (VOCs).")
+
+with abas_leed[7]:
+    st.info("🚀 *Innovation (IN):* Estratégias de design inovador e superação de metas (Ex: Desvio de aterro atingindo status de performance exemplar).")
+
+with abas_leed[8]:
+    st.info("🗺️ *Regional Priority (RP):* Créditos de bônus ativados com base nas coordenadas geográficas e prioridades ambientais da região.")
 st.markdown("---")
-st.markdown("### 🏛️ Matriz de Governança de Créditos - LEED BD+C v4")
 
-# Configuração das categorias e seus orçamentos (Exemplos)
-# Você pode continuar o desenvolvimento da matriz a partir daqui...
-    "Integrative Process (IP)": {"budget": 10000, "spent": 4000, "cert": {'Gold': 50, 'Silver': 30, 'Platinum': 20}},
-    "Location and Transportation (LT)": {"budget": 20000, "spent": 12000, "cert": {'Gold': 40, 'Silver': 40, 'Platinum': 20}},
-    "Sustainable Sites (SS)": {"budget": 50000, "spent": 32000, "cert": {'Gold': 30, 'Silver': 30, 'Platinum': 40}},
-    "Water Efficiency (WE)": {"budget": 30000, "spent": 15000, "cert": {'Gold': 60, 'Silver': 20, 'Platinum': 20}},
-    "Energy and Atmosphere (EA)": {"budget": 80000, "spent": 75000, "cert": {'Gold': 20, 'Silver': 20, 'Platinum': 60}},
-    "Materials and Resources (MR)": {"budget": 120000, "spent": 85000, "cert": {'Gold': 25, 'Silver': 25, 'Platinum': 50}},
-    "Indoor Environmental Quality (EQ)": {"budget": 40000, "spent": 20000, "cert": {'Gold': 40, 'Silver': 40, 'Platinum': 20}},
-    "Innovation (IN)": {"budget": 15000, "spent": 5000, "cert": {'Gold': 33, 'Silver': 33, 'Platinum': 34}},
-    "Regional Priority (RP)": {"budget": 10000, "spent": 2000, "cert": {'Gold': 50, 'Silver': 25, 'Platinum': 25}}
-}
-
-# Criando as abas
-abas_nomes = list(categorias.keys())
-abas_leed = st.tabs(abas_nomes)
-
-def renderizar_aba(aba_index, nome):
-    data = categorias[nome]
-    st.markdown(f"#### 🎯 {nome} - Painel de Performance")
-    
-    col1, col2, col3 = st.columns([1, 1, 1])
-    
-    with col1:
-        # Gráfico de Pizza (Status da Certificação)
-        fig, ax = plt.subplots(figsize=(2.5, 2.5))
-        ax.pie(data['cert'].values(), labels=data['cert'].keys(), autopct='%1.0f%%', 
-               colors=['#FFD700', '#C0C0C0', '#E5E4E2'], startangle=90)
-        ax.set_title("Nível de Certificação")
-        st.pyplot(fig)
-        
-    with col2:
-        # ARC-Trend: Gráfico de evolução temporal fictício
-        st.write("📈 Tendência de Performance (6 meses):")
-        df_trend = pd.DataFrame({'Meses': ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'], 'Score': [60, 65, 70, 68, 75, 78]})
-        st.line_chart(df_trend.set_index('Meses'))
-        
-    with col3:
-        # Financeiro e Ações
-        st.write(f"💰 Orçamento de Conformidade:")
-        porcentagem = data['spent'] / data['budget']
-        st.progress(porcentagem)
-        st.caption(f"Executado: R$ {data['spent']:,.2f}")
-        
-        # Expander de Documentação (Mantido e melhorado)
-        with st.expander("📂 Documentos e Checklist"):
-            st.file_uploader(f"Upload {nome}", type=["pdf"], key=f"up_{nome}")
-            st.checkbox(f"Crédito atingido", key=f"ch_{nome}")
-
-# Renderizando todas as abas
-for i, nome in enumerate(abas_nomes):
-    with abas_leed[i]:
-        renderizar_aba(i, nome)
-
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.caption("🔒 Certificação de Dados: GreenConformity segue as diretrizes do LEED BD+C v4/v4.1. Dados protegidos por chaves corporativas privadas de criptografia.")
-
-st.markdown("<br><br>", unsafe_allow_html=True)
 # Barra Lateral - Filtros de Governança Corporativa
 st.sidebar.header("🏢 Governança de Portfólio")
 obra_selecionada = st.sidebar.selectbox("Selecionar Canteiro de Obras:", ["Edifício Venâncio Eco-Efficient", "Complexo Logístico Alpha", "Residencial Solar Hub"])
@@ -144,7 +104,7 @@ st.markdown("<br>", unsafe_allow_html=True) # Espaçamento visual para o rodapé
 
 # Dica de Tema na Sidebar
 st.sidebar.markdown("---")
-st.sidebar.caption("🌓 *Dica de Visualização:* Alterne entre Modo Claro e Escuro clicando nas configurações (⚙️) no canto superior direito da tela.")
+st.sidebar.caption("🌓 **Dica de Visualização:** Alterne entre Modo Claro e Escuro clicando nas configurações (⚙️) no canto superior direito da tela.")
 
 # 3. Dados de Engenharia Brutos (Volume m³)
 dados_brutos = {
