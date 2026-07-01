@@ -48,6 +48,18 @@ st.markdown("""
 st.markdown('<h1 class="centered-title">🌱 Plataforma GreenConformity</h1>', unsafe_allow_html=True)
 st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
 st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformidade Ambiental e Certificação</p>', unsafe_allow_html=True)
+# --- MÓDULO ARC-INSPIRED: ENGINE DE SCORE DE PERFORMANCE ---
+st.markdown("---")
+col_arc1, col_arc2, col_arc3 = st.columns([1, 2, 1])
+
+with col_arc2:
+    st.markdown("### 🎯 Score de Performance GreenConformity (ARC-Engine)")
+    # Simulação de Score Dinâmico (Média ponderada das categorias)
+    score_atual = 78.5
+    st.metric(label="Pontuação Geral de Certificação", value=f"{score_atual} pts", delta="+2.5 vs último mês")
+    st.progress(score_atual / 100)
+    st.caption("Acompanhamento contínuo baseado nas diretrizes LEED v4.1 O+M")
+st.markdown("---")
 
 # 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Evoluído para Gestão de Performance)
 st.markdown("---")
@@ -70,34 +82,37 @@ categorias = {
 abas_nomes = list(categorias.keys())
 abas_leed = st.tabs(abas_nomes)
 
-# Função de renderização para manter o código DRY (Don't Repeat Yourself)
 def renderizar_aba(aba_index, nome):
     data = categorias[nome]
-    st.markdown(f"#### 🎯 {nome}")
+    st.markdown(f"#### 🎯 {nome} - Painel de Performance")
     
-    # Colunas para Gráfico e Dados Financeiros
-    col1, col2 = st.columns([1, 2])
+    col1, col2, col3 = st.columns([1, 1, 1])
     
     with col1:
-        # Gráfico de Pizza
-        fig, ax = plt.subplots(figsize=(3, 3))
-        ax.pie(data['cert'].values(), labels=data['cert'].keys(), autopct='%1.1f%%', 
+        # Gráfico de Pizza (Status da Certificação)
+        fig, ax = plt.subplots(figsize=(2.5, 2.5))
+        ax.pie(data['cert'].values(), labels=data['cert'].keys(), autopct='%1.0f%%', 
                colors=['#FFD700', '#C0C0C0', '#E5E4E2'], startangle=90)
-        ax.set_title("Nível de Certificação Atual")
+        ax.set_title("Nível de Certificação")
         st.pyplot(fig)
         
     with col2:
-        # Financeiro
-        st.write(f"*💰 Acompanhamento Financeiro:*")
+        # ARC-Trend: Gráfico de evolução temporal fictício
+        st.write("📈 Tendência de Performance (6 meses):")
+        df_trend = pd.DataFrame({'Meses': ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'], 'Score': [60, 65, 70, 68, 75, 78]})
+        st.line_chart(df_trend.set_index('Meses'))
+        
+    with col3:
+        # Financeiro e Ações
+        st.write(f"💰 Orçamento de Conformidade:")
         porcentagem = data['spent'] / data['budget']
         st.progress(porcentagem)
-        st.caption(f"Gasto: R$ {data['spent']:,.2f} / Orçamento: R$ {data['budget']:,.2f}")
+        st.caption(f"Executado: R$ {data['spent']:,.2f}")
         
-        # Expander de Documentação
-        with st.expander("📂 Gerenciar Evidências e Uploads"):
-            st.file_uploader(f"Upload de documentos para {nome}", type=["pdf", "dwg", "docx"], key=f"upload_{nome}")
-            st.checkbox(f"Requisito Mandatório Atendido - {nome}", key=f"check_{nome}")
-            st.text_area(f"Notas de Auditoria - {nome}", key=f"area_{nome}")
+        # Expander de Documentação (Mantido e melhorado)
+        with st.expander("📂 Documentos e Checklist"):
+            st.file_uploader(f"Upload {nome}", type=["pdf"], key=f"up_{nome}")
+            st.checkbox(f"Crédito atingido", key=f"ch_{nome}")
 
 # Renderizando todas as abas
 for i, nome in enumerate(abas_nomes):
