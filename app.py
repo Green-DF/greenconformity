@@ -10,9 +10,16 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. Injeção de CSS para Centralização de Títulos e Estilização de Cartões
+# 2. Injeção de CSS para Centralização de Títulos, Estilização de Cartões e Logo USGBC
 st.markdown("""
     <style>
+    .usgbc-logo {
+        position: absolute;
+        top: -40px; /* Ajuste para encaixar perfeitamente no topo direito da tela */
+        right: 10px;
+        width: 140px;
+        z-index: 100;
+    }
     .centered-title {
         text-align: center;
         margin-bottom: 0px;
@@ -42,6 +49,8 @@ st.markdown("""
         margin-bottom: 20px;
     }
     </style>
+    
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/36/USGBC_logo.svg/512px-USGBC_logo.svg.png" class="usgbc-logo" alt="USGBC Logo">
 """, unsafe_allow_html=True)
 
 # Aplicação dos Títulos Centralizados Solicitados
@@ -135,14 +144,14 @@ with st.expander("📈 Expandir Curva de Evolução Longitudinal (Últimos 6 mes
 
 
 # =====================================================================
-# NOVO FORMATO: MATRIZ DE GOVERNANÇA EM MENU EXPANSÍVEL
+# NOVO FORMATO: MATRIZ DE GOVERNANÇA (MENU EXPANSÍVEL + NAVBAR)
 # =====================================================================
 st.markdown("---")
 with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", expanded=True):
     st.markdown("Painel de auditoria de requisitos e coleta de evidências para a certificação do ativo:")
 
-    # Criação das abas para as 9 categorias oficiais
-    abas_leed = st.tabs([
+    # Criação do Navbar utilizando rádio horizontal
+    opcoes_navbar = [
         "IP (Processo)", 
         "LT (Localização)", 
         "SS (Terrenos)", 
@@ -152,22 +161,26 @@ with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", ex
         "EQ (Qualidade Interna)", 
         "IN (Inovação)", 
         "RP (Prioridade)"
-    ])
+    ]
+    
+    aba_selecionada = st.radio("Navegação de Categorias:", opcoes_navbar, horizontal=True, label_visibility="collapsed")
+    st.markdown("---")
 
-    with abas_leed[0]:
+    # Condicionais para renderizar o conteúdo com base na seleção do Navbar
+    if aba_selecionada == "IP (Processo)":
         st.markdown("#### 🤝 Processo Integrativo")
         st.caption("Documentação de Sinergia na Fase de Projeto")
         st.checkbox("✔️ Relatório de Sinergia de Energia Concluído (Obrigatório)", value=True)
         st.checkbox("✔️ Relatório de Sinergia de Água Concluído (Obrigatório)", value=True)
         st.button("📄 Gerar Termo de Abertura do Projeto (OPR)")
 
-    with abas_leed[1]:
+    elif aba_selecionada == "LT (Localização)":
         st.markdown("#### 🚲 Localização e Transporte")
         st.caption("Infraestrutura de Baixo Carbono")
         st.slider("Densidade do Entorno (Interseções num raio de 1km²)", min_value=0, max_value=500, value=150)
         st.number_input("Vagas Físicas para Bicicletas no Empreendimento", min_value=0, value=12)
 
-    with abas_leed[2]:
+    elif aba_selecionada == "SS (Terrenos)":
         st.markdown("#### 🌳 Terrenos Sustentáveis")
         st.warning("⚖️ Risco Jurídico: O Plano ESC é exigência de licenciamento e pré-requisito LEED.")
         st.file_uploader("Anexar Relatório Fotográfico Semanal de Prevenção de Poluição (ESC)", type=["pdf"])
@@ -177,20 +190,20 @@ with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", ex
         with col_ss2:
             st.checkbox("Proteção de Bocas de Lobo Ativa")
 
-    with abas_leed[3]:
+    elif aba_selecionada == "WE (Água)":
         st.markdown("#### 💧 Eficiência Hídrica")
         st.caption("Monitoramento de Consumo e Redução")
         st.metric(label="Desempenho de Redução Hídrica (Design)", value="38%", delta="Meta Base: >20%")
         st.progress(38)
         st.checkbox("Submedidores Temporários Instalados no Canteiro")
 
-    with abas_leed[4]:
+    elif aba_selecionada == "EA (Energia)":
         st.markdown("#### ⚡ Energia e Atmosfera")
         st.caption("Comissionamento e Proteção da Camada de Ozônio")
         st.selectbox("Status do Comissionamento Fundamental (CxA):", ["Não Iniciado", "Em Andamento (Revisão de Projeto)", "Em Campo", "Concluído"])
         st.checkbox("Zero Uso de CFCs em Equipamentos de Alojamento", value=True)
 
-    with abas_leed[5]:
+    elif aba_selecionada == "MR (Materiais)":
         st.markdown("#### 📦 Materiais e Recursos (MR)")
         st.success("♻️ A auditoria de desvio de aterro e balanço de massa está totalmente integrada e ativa nesta seção de Materiais.")
         
@@ -198,7 +211,7 @@ with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", ex
         st.number_input("Quantidade de Materiais com Certificado EPD/FSC Verificado", min_value=0, value=14)
         st.markdown("---")
         
-        # INCLUSÃO: MÓDULO DE BALANÇO DE MASSA AUDITADO (Antigo Bloco 5)
+        # INCLUSÃO: MÓDULO DE BALANÇO DE MASSA AUDITADO
         st.markdown(f"### 📊 Balanço de Massa Auditado - {obra_selecionada}")
         kpi1, kpi2, kpi3, kpi4 = st.columns(4)
 
@@ -215,7 +228,7 @@ with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", ex
         st.progress(int(taxa_desvio_leed) if taxa_desvio_leed <= 100 else 100)
         st.markdown("---")
 
-        # INCLUSÃO: INTERFACE DIVIDIDA - UPLOAD E GRÁFICO (Antigo Bloco 6)
+        # INCLUSÃO: INTERFACE DIVIDIDA - UPLOAD E GRÁFICO
         col1, col2 = st.columns([1, 1], gap="large")
 
         with col1:
@@ -256,9 +269,9 @@ with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", ex
                 spine.set_visible(False)
                 
             st.pyplot(fig)
-            plt.close(fig) # Liberar memória latente de plotagem
+            plt.close(fig)
 
-    with abas_leed[6]:
+    elif aba_selecionada == "EQ (Qualidade Interna)":
         st.markdown("#### 🌬️ Qualidade Ambiental Interna")
         st.caption("Proteção da Saúde Ocupacional e Futuros Ocupantes")
         st.multiselect(
@@ -267,7 +280,7 @@ with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", ex
             default=["Tinta Epóxi Piso", "Selante Poliuretano (PU)"]
         )
 
-    with abas_leed[7]:
+    elif aba_selecionada == "IN (Inovação)":
         st.markdown("#### 🚀 Inovação em Design")
         st.caption("Estratégias para Superação de Metas")
         st.text_area(
@@ -275,7 +288,7 @@ with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", ex
             "A Venâncio Empreendimentos atingiu a meta excepcional de..."
         )
             
-    with abas_leed[8]:
+    elif aba_selecionada == "RP (Prioridade)":
         st.markdown("#### 🗺️ Prioridade Regional")
         st.caption("Bônus de Certificação Específicos para a Coordenada Geográfica")
         st.selectbox(
@@ -283,6 +296,6 @@ with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", ex
             ["Nenhum", "WEc: Redução de Uso de Água Externa", "EAc: Otimização de Performance Energética", "SSc: Gestão de Águas Pluviais"]
         )
 
-# Rodapé de Conformidade Global (Mantido firme na base)
+# Rodapé de Conformidade Global
 st.markdown("---")
 st.caption("🔒 Certificação de Dados: GreenConformity segue as diretrizes do LEED BD+C v4/v4.1. Dados protegidos por chaves corporativas privadas de criptografia.")
