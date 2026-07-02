@@ -21,7 +21,7 @@ st.markdown("""
     
     .brand-title {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 5.75rem;
+        font-size: 1.75rem;
         font-weight: 700;
         color: #2e7d32;
         letter-spacing: -0.5px;
@@ -64,7 +64,7 @@ st.markdown("""
 header_col1, header_col2 = st.columns([1.2, 3])
 
 with header_col1:
-    st.markdown("<p class='brand-title' style='margin-top: 5px;'>Green Conformity</p>", unsafe_allow_html=True)
+    st.markdown("<p class='brand-title' style='margin-top: 25px;'>Green Conformity</p>", unsafe_allow_html=True)
 
 with header_col2:
     opcoes_navbar = [
@@ -93,7 +93,7 @@ st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformi
 # FILTROS DA BARRA LATERAL
 # =====================================================================
 st.sidebar.header("🏢 Governança de Portfólio")
-obra_selecionada = st.sidebar.selectbox("Selecionar Canteiro de Obras:", ["Edifício Venâncio Eco-Efficient", "Complexo Logístico Alpha", "Residencial Solar Hub"])
+obra_selecionada = st.sidebar.selectbox("Selecionar Canteiro de Obras:", ["601 Empreendimentos", "208 Empreendimentos", "Residencial Solar Hub"])
 fase_obra = st.sidebar.radio("Fase Atual da Obra:", ["Estrutura", "Alvenaria/Acabamento", "Comissionamento"])
 
 st.sidebar.markdown("---")
