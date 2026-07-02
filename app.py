@@ -21,7 +21,7 @@ st.markdown("""
     
     .brand-title {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 1.75rem;
+        font-size: 5.75rem;
         font-weight: 700;
         color: #2e7d32;
         letter-spacing: -0.5px;
