@@ -23,9 +23,9 @@ st.markdown("""
     /* Hierarquia Tipográfica Rigorosa */
     .brand-title {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 1.45rem;
+        font-size: 1.75rem; /* Ajustado para equivaler ao tamanho do h3 (###) */
         font-weight: 700;
-        color: #1e1e1e;
+        color: #2e7d32; /* Alterado para o mesmo tom verde da plataforma */
         letter-spacing: -0.5px;
         margin: 0;
         padding: 0;
@@ -76,10 +76,10 @@ st.markdown("""
 # =====================================================================
 # HEADER PREMIUM MINIMALISTA (Inspirado no Padrão de Interface do Usuário)
 # =====================================================================
-header_col1, header_col2 = st.columns([1, 3])
+header_col1, header_col2 = st.columns([1.2, 3])
 
 with header_col1:
-    # Nome comercial alinhado à esquerda com tipografia corporativa limpa
+    # Nome comercial aumentado, no tom verde correto e alinhado à esquerda
     st.markdown("<p class='brand-title' style='margin-top: 5px;'>Green Conformity</p>", unsafe_allow_html=True)
 
 with header_col2:
@@ -104,7 +104,7 @@ with header_col2:
 
 st.markdown("<hr style='margin-top: 5px; margin-bottom: 15px; border-color: rgba(0,0,0,0.08);'>", unsafe_allow_html=True)
 
-# Linhas Hierárquicas de Identificação Técnica do Painel
+# Linhas Hierárquicas de Identificação Técnico do Painel
 st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
 st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformidade Ambiental e Certificação</p>', unsafe_allow_html=True)
 
@@ -179,8 +179,27 @@ arc_c4.metric(label="🚲 Transporte", value="9/14 pts", delta="-1 pt (Alerta)",
 arc_c5.metric(label="👥 Exp. Humana", value="15/20 pts", delta="Conforme", delta_color="off")
 
 st.markdown("<br>", unsafe_allow_html=True)
+
+# Texto de monitoramento movido para fora do expander, acompanhado dos 4 gráficos pequenos de tipologias LEED
+st.write("Monitoramento contínuo da pontuação para evitar depreciação do ativo:")
+
+cert_c1, cert_c2, cert_c3, cert_c4 = st.columns(4)
+with cert_c1:
+    st.caption("Certified (40-49 pts)")
+    st.progress(100) # 78 pontos supera totalmente o nível base
+with cert_c2:
+    st.caption("Silver (50-59 pts)")
+    st.progress(100) # 78 pontos supera totalmente o nível prata
+with cert_c3:
+    st.caption("Gold (60-79 pts)")
+    # Mapeia proporcionalmente os 78 pontos dentro do intervalo Gold (18/20 pontos percorridos)
+    st.progress(90) 
+with cert_c4:
+    st.caption("Platinum (80+ pts)")
+    # Mostra quão próximo está do nível Platinum (78 de 80 necessários)
+    st.progress(97)
+
 with st.expander("📈 Expandir Curva de Evolução Longitudinal (Últimos 6 meses)"):
-    st.write("Monitoramento contínuo da pontuação para evitar depreciação do ativo:")
     df_arc_trend = pd.DataFrame({
         'Mês': ['Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
         'Score Global': [62, 65, 70, 72, 75, 78]
@@ -198,14 +217,12 @@ with st.expander(f"🏛️ Matriz de Governança de Créditos Ativa: {st.session
 
     if st.session_state.aba_ativa == "IP (Processo)":
         st.markdown("#### 🤝 Processo Integrativo")
-        st.caption("Documentação de Sinergia na Fase de Projeto")
         st.checkbox("✔️ Relatório de Sinergia de Energia Concluído (Obrigatório)", value=True)
         st.checkbox("✔️ Relatório de Sinergia de Água Concluído (Obrigatório)", value=True)
         st.button("📄 Gerar Termo de Abertura do Projeto (OPR)")
 
     elif st.session_state.aba_ativa == "LT (Localização)":
         st.markdown("#### 🚲 Localização e Transporte")
-        st.caption("Infraestrutura de Baixo Carbono")
         st.slider("Densidade do Entorno (Interseções num raio de 1km²)", min_value=0, max_value=500, value=150)
         st.number_input("Vagas Físicas para Bicicletas no Empreendimento", min_value=0, value=12)
 
@@ -221,14 +238,12 @@ with st.expander(f"🏛️ Matriz de Governança de Créditos Ativa: {st.session
 
     elif st.session_state.aba_ativa == "WE (Água)":
         st.markdown("#### 💧 Eficiência Hídrica")
-        st.caption("Monitoramento de Consumo e Redução")
         st.metric(label="Desempenho de Redução Hídrica (Design)", value="38%", delta="Meta Base: >20%")
         st.progress(38)
         st.checkbox("Submedidores Temporários Instalados no Canteiro")
 
     elif st.session_state.aba_ativa == "EA (Energia)":
         st.markdown("#### ⚡ Energia e Atmosfera")
-        st.caption("Comissionamento e Proteção da Camada de Ozônio")
         st.selectbox("Status do Comissionamento Fundamental (CxA):", ["Não Iniciado", "Em Andamento (Revisão de Projeto)", "Em Campo", "Concluído"])
         st.checkbox("Zero Uso de CFCs em Equipamentos de Alojamento", value=True)
 
@@ -300,7 +315,6 @@ with st.expander(f"🏛️ Matriz de Governança de Créditos Ativa: {st.session
 
     elif st.session_state.aba_ativa == "EQ (Qualidade)":
         st.markdown("#### 🌬️ Qualidade Ambiental Interna")
-        st.caption("Proteção da Saúde Ocupacional e Futuros Ocupantes")
         st.multiselect(
             "Rastreabilidade de Materiais de Baixo VOC (Fichas FISPQ aprovadas):", 
             ["Tinta Epóxi Piso", "Selante Poliuretano (PU)", "Adesivo para Madeira", "Verniz Base Água", "Gesso Acartonado"], 
@@ -309,7 +323,6 @@ with st.expander(f"🏛️ Matriz de Governança de Créditos Ativa: {st.session
 
     elif st.session_state.aba_ativa == "IN (Inovação)":
         st.markdown("#### 🚀 Inovação em Design")
-        st.caption("Estratégias para Superação de Metas")
         st.text_area(
             "Registro de Performance Exemplar (Ex: Desvio de aterro atingindo 95%+):", 
             "A Venâncio Empreendimentos atingiu a meta excepcional de..."
@@ -317,7 +330,6 @@ with st.expander(f"🏛️ Matriz de Governança de Créditos Ativa: {st.session
             
     elif st.session_state.aba_ativa == "RP (Prioridade)":
         st.markdown("#### 🗺️ Prioridade Regional")
-        st.caption("Bônus de Certificação Específicos para a Coordenada Geográfica")
         st.selectbox(
             "Selecione o Crédito de Prioridade Regional Atingido:", 
             ["Nenhum", "WEc: Redução de Uso de Água Externa", "EAc: Otimização de Performance Energética", "SSc: Gestão de Águas Pluviais"]
