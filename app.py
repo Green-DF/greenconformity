@@ -10,30 +10,63 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. Injeção de CSS para Estilização de Elementos e Cartões
+# 2. Injeção de CSS para Governança Estética, Hierarquia Tipográfica e Navbar Minimalista
 st.markdown("""
     <style>
+    /* Reset e Variáveis de Cores Corporativas */
+    :root {
+        --primary-color: #1e1e1e;
+        --secondary-color: #2e7d32;
+        --text-muted: #5f6368;
+    }
+    
+    /* Hierarquia Tipográfica Rigorosa */
+    .brand-title {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-size: 1.45rem;
+        font-weight: 700;
+        color: #1e1e1e;
+        letter-spacing: -0.5px;
+        margin: 0;
+        padding: 0;
+    }
+    
     .centered-subtitle {
         text-align: center;
-        color: #666666;
-        margin-top: 10px;
+        color: #5f6368;
+        margin-top: 15px;
         margin-bottom: 5px;
-        font-size: 1.15rem;
+        font-size: 1.1rem;
         font-weight: 500;
     }
+    
     .centered-painel {
         text-align: center;
         color: #2e7d32;
         margin-top: -5px;
-        margin-bottom: 25px;
-        font-size: 1.4rem;
+        margin-bottom: 30px;
+        font-size: 1.3rem;
         font-weight: 600;
     }
+    
+    /* Estilização dos Links de Navegação Simulando o Modelo Enviado */
+    .nav-link-btn {
+        background: none;
+        border: none;
+        color: #3c4043;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        font-size: 0.95rem;
+        font-weight: 500;
+        padding: 6px 12px;
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+    
     .custom-card {
         padding: 20px;
         border-radius: 10px;
-        border: 1px solid rgba(46, 125, 50, 0.2);
-        background-color: rgba(46, 125, 50, 0.02);
+        border: 1px solid rgba(46, 125, 50, 0.15);
+        background-color: rgba(46, 125, 50, 0.01);
         margin-bottom: 20px;
     }
     </style>
@@ -41,44 +74,37 @@ st.markdown("""
 
 
 # =====================================================================
-# HEADER UNIFICADO (Título Esquerdo, Navbar Central e Ícone Direito)
+# HEADER PREMIUM MINIMALISTA (Inspirado no Padrão de Interface do Usuário)
 # =====================================================================
-header_col1, header_col2, header_col3 = st.columns([2, 7, 1])
+header_col1, header_col2 = st.columns([1, 3])
 
 with header_col1:
-    st.markdown("<h3 style='margin-top: 8px; font-size: 1.35rem; font-weight: 700; color: #2e7d32; white-space: nowrap;'>Green Conformity</h3>", unsafe_allow_html=True)
+    # Nome comercial alinhado à esquerda com tipografia corporativa limpa
+    st.markdown("<p class='brand-title' style='margin-top: 5px;'>Green Conformity</p>", unsafe_allow_html=True)
 
 with header_col2:
+    # Sistema de navegação horizontal por colunas de botões nativos para reproduzir os links textuais da imagem
     opcoes_navbar = [
-        "IP (Processo)", 
-        "LT (Localização)", 
-        "SS (Terrenos)", 
-        "WE (Água)", 
-        "EA (Energia)", 
-        "MR (Materiais)", 
-        "EQ (Qualidade Interna)", 
-        "IN (Inovação)", 
-        "RP (Prioridade)"
+        "IP (Processo)", "LT (Localização)", "SS (Terrenos)", "WE (Água)", 
+        "EA (Energia)", "MR (Materiais)", "EQ (Qualidade)", "IN (Inovação)", "RP (Prioridade)"
     ]
-    aba_selecionada = st.radio("Navegação de Categorias:", opcoes_navbar, horizontal=True, label_visibility="collapsed")
+    
+    # Inicialização do estado da aba de navegação se não existir
+    if 'aba_ativa' not in st.session_state:
+        st.session_state.aba_ativa = "IP (Processo)"
+        
+    nav_cols = st.columns(len(opcoes_navbar))
+    for idx, opcao in enumerate(opcoes_navbar):
+        with nav_cols[idx]:
+            # Destaca sutilmente a aba selecionada alterando o peso visual do botão
+            estilo_label = f"*{opcao}*" if st.session_state.aba_ativa == opcao else opcao
+            if st.button(estilo_label, key=f"nav_{opcao}", use_container_width=True, help=f"Navegar para {opcao}"):
+                st.session_state.aba_ativa = opcao
+                st.rerun()
 
-with header_col3:
-    # Ícone vetorial customizado: Balança com Elemento Natural (Folha)
-    st.markdown("""
-        <div style="text-align: right; margin-top: 4px;">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 3V21M6 21H18" stroke="#2e7d32" stroke-width="2" stroke-linecap="round"/>
-                <path d="M4 7H20" stroke="#2e7d32" stroke-width="2" stroke-linecap="round"/>
-                <path d="M4 7L2 13M4 7L6 13M2 13H6" stroke="#2e7d32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M20 7L18 13M20 7L22 13M18 13H22" stroke="#2e7d32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M12 7C13.5 8.5 14 11 12 13C10 11 10.5 8.5 12 7Z" fill="#81c784" opacity="0.9"/>
-            </svg>
-        </div>
-    """, unsafe_allow_html=True)
+st.markdown("<hr style='margin-top: 5px; margin-bottom: 15px; border-color: rgba(0,0,0,0.08);'>", unsafe_allow_html=True)
 
-st.markdown("---")
-
-# Linhas de Identificação do Subtítulo e Painel Ativo
+# Linhas Hierárquicas de Identificação Técnica do Painel
 st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
 st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformidade Ambiental e Certificação</p>', unsafe_allow_html=True)
 
@@ -163,27 +189,27 @@ with st.expander("📈 Expandir Curva de Evolução Longitudinal (Últimos 6 mes
 
 
 # =====================================================================
-# MATRIZ DE GOVERNANÇA (MENU EXPANSÍVEL CONECTADO AO NAVBAR SUPERIOR)
+# MATRIZ DE GOVERNANÇA (CONTEÚDO EXPANSÍVEL CONECTADO AO NAVBAR SUPERIOR)
 # =====================================================================
 st.markdown("---")
-with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", expanded=True):
+with st.expander(f"🏛️ Matriz de Governança de Créditos Ativa: {st.session_state.aba_ativa} - LEED BD+C v4", expanded=True):
     st.markdown("Painel de auditoria de requisitos e coleta de evidências para a certificação do ativo:")
     st.markdown("---")
 
-    if aba_selecionada == "IP (Processo)":
+    if st.session_state.aba_ativa == "IP (Processo)":
         st.markdown("#### 🤝 Processo Integrativo")
         st.caption("Documentação de Sinergia na Fase de Projeto")
         st.checkbox("✔️ Relatório de Sinergia de Energia Concluído (Obrigatório)", value=True)
         st.checkbox("✔️ Relatório de Sinergia de Água Concluído (Obrigatório)", value=True)
         st.button("📄 Gerar Termo de Abertura do Projeto (OPR)")
 
-    elif aba_selecionada == "LT (Localização)":
+    elif st.session_state.aba_ativa == "LT (Localização)":
         st.markdown("#### 🚲 Localização e Transporte")
         st.caption("Infraestrutura de Baixo Carbono")
         st.slider("Densidade do Entorno (Interseções num raio de 1km²)", min_value=0, max_value=500, value=150)
         st.number_input("Vagas Físicas para Bicicletas no Empreendimento", min_value=0, value=12)
 
-    elif aba_selecionada == "SS (Terrenos)":
+    elif st.session_state.aba_ativa == "SS (Terrenos)":
         st.markdown("#### 🌳 Terrenos Sustentáveis")
         st.warning("⚖️ Risco Jurídico: O Plano ESC é exigência de licenciamento e pré-requisito LEED.")
         st.file_uploader("Anexar Relatório Fotográfico Semanal de Prevenção de Poluição (ESC)", type=["pdf"])
@@ -193,20 +219,20 @@ with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", ex
         with col_ss2:
             st.checkbox("Proteção de Bocas de Lobo Ativa")
 
-    elif aba_selecionada == "WE (Água)":
+    elif st.session_state.aba_ativa == "WE (Água)":
         st.markdown("#### 💧 Eficiência Hídrica")
         st.caption("Monitoramento de Consumo e Redução")
         st.metric(label="Desempenho de Redução Hídrica (Design)", value="38%", delta="Meta Base: >20%")
         st.progress(38)
         st.checkbox("Submedidores Temporários Instalados no Canteiro")
 
-    elif aba_selecionada == "EA (Energia)":
+    elif st.session_state.aba_ativa == "EA (Energia)":
         st.markdown("#### ⚡ Energia e Atmosfera")
         st.caption("Comissionamento e Proteção da Camada de Ozônio")
         st.selectbox("Status do Comissionamento Fundamental (CxA):", ["Não Iniciado", "Em Andamento (Revisão de Projeto)", "Em Campo", "Concluído"])
         st.checkbox("Zero Uso de CFCs em Equipamentos de Alojamento", value=True)
 
-    elif aba_selecionada == "MR (Materiais)":
+    elif st.session_state.aba_ativa == "MR (Materiais)":
         st.markdown("#### 📦 Materiais e Recursos (MR)")
         st.success("♻️ A auditoria de desvio de aterro e balanço de massa está totalmente integrada e ativa nesta seção de Materiais.")
         
@@ -272,7 +298,7 @@ with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", ex
             st.pyplot(fig)
             plt.close(fig)
 
-    elif aba_selecionada == "EQ (Qualidade Interna)":
+    elif st.session_state.aba_ativa == "EQ (Qualidade)":
         st.markdown("#### 🌬️ Qualidade Ambiental Interna")
         st.caption("Proteção da Saúde Ocupacional e Futuros Ocupantes")
         st.multiselect(
@@ -281,7 +307,7 @@ with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", ex
             default=["Tinta Epóxi Piso", "Selante Poliuretano (PU)"]
         )
 
-    elif aba_selecionada == "IN (Inovação)":
+    elif st.session_state.aba_ativa == "IN (Inovação)":
         st.markdown("#### 🚀 Inovação em Design")
         st.caption("Estratégias para Superação de Metas")
         st.text_area(
@@ -289,7 +315,7 @@ with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", ex
             "A Venâncio Empreendimentos atingiu a meta excepcional de..."
         )
             
-    elif aba_selecionada == "RP (Prioridade)":
+    elif st.session_state.aba_ativa == "RP (Prioridade)":
         st.markdown("#### 🗺️ Prioridade Regional")
         st.caption("Bônus de Certificação Específicos para a Coordenada Geográfica")
         st.selectbox(
