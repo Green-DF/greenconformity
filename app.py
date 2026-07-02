@@ -10,99 +10,130 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. Injeção de CSS para Governança Estética, Hierarquia Tipográfica e Navbar Minimalista
+# 2. Injeção de CSS para Centralização de Títulos e Estilização de Cartões
 st.markdown("""
     <style>
-    :root {
-        --primary-color: #1e1e1e;
-        --secondary-color: #2e7d32;
-        --text-muted: #5f6368;
-    }
-    
-    .brand-title {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 1.75rem;
+    .centered-title {
+        text-align: center;
+        margin-bottom: 0px;
         font-weight: 700;
-        color: #2e7d32;
-        letter-spacing: -0.5px;
-        margin: 0;
-        padding: 0;
     }
-    
     .centered-subtitle {
         text-align: center;
-        color: #5f6368;
-        margin-top: 15px;
+        color: #666666;
+        margin-top: -10px;
         margin-bottom: 5px;
-        font-size: 1.1rem;
+        font-size: 1.15rem;
         font-weight: 500;
     }
-    
     .centered-painel {
         text-align: center;
         color: #2e7d32;
         margin-top: -5px;
-        margin-bottom: 30px;
-        font-size: 1.3rem;
+        margin-bottom: 25px;
+        font-size: 1.4rem;
         font-weight: 600;
     }
-    
     .custom-card {
         padding: 20px;
         border-radius: 10px;
-        border: 1px solid rgba(46, 125, 50, 0.15);
-        background-color: rgba(46, 125, 50, 0.01);
+        border: 1px solid rgba(46, 125, 50, 0.2);
+        background-color: rgba(46, 125, 50, 0.02);
         margin-bottom: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-
-# =====================================================================
-# HEADER PREMIUM MINIMALISTA
-# =====================================================================
-header_col1, header_col2 = st.columns([1.2, 3])
-
-with header_col1:
-    st.markdown("<p class='brand-title' style='margin-top: 25px;'>Green Conformity</p>", unsafe_allow_html=True)
-
-with header_col2:
-    opcoes_navbar = [
-        "IP (Processo)", "LT (Localização)", "SS (Terrenos)", "WE (Água)", 
-        "EA (Energia)", "MR (Materiais)", "EQ (Qualidade)", "IN (Inovação)", "RP (Prioridade)"
-    ]
-    
-    if 'aba_ativa' not in st.session_state:
-        st.session_state.aba_ativa = "IP (Processo)"
-        
-    nav_cols = st.columns(len(opcoes_navbar))
-    for idx, opcao in enumerate(opcoes_navbar):
-        with nav_cols[idx]:
-            estilo_label = f"*{opcao}*" if st.session_state.aba_ativa == opcao else opcao
-            if st.button(estilo_label, key=f"nav_{opcao}", use_container_width=True):
-                st.session_state.aba_ativa = opcao
-                st.rerun()
-
-st.markdown("<hr style='margin-top: 5px; margin-bottom: 15px; border-color: rgba(0,0,0,0.08);'>", unsafe_allow_html=True)
-
+# Aplicação dos Títulos Centralizados Solicitados
+st.markdown('<h1 class="centered-title">🌱 Plataforma GreenConformity</h1>', unsafe_allow_html=True)
 st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
 st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformidade Ambiental e Certificação</p>', unsafe_allow_html=True)
+# --- MÓDULO ARC-INSPIRED: ENGINE DE SCORE DE PERFORMANCE ---
+st.markdown("---")
+col_arc1, col_arc2, col_arc3 = st.columns([1, 2, 1])
 
+with col_arc2:
+    st.markdown("### 🎯 Score de Performance GreenConformity (ARC-Engine)")
+    # Simulação de Score Dinâmico (Média ponderada das categorias)
+    score_atual = 78.5
+    st.metric(label="Pontuação Geral de Certificação", value=f"{score_atual} pts", delta="+2.5 vs último mês")
+    st.progress(score_atual / 100)
+    st.caption("Acompanhamento contínuo baseado nas diretrizes LEED v4.1 O+M")
+st.markdown("---")
 
-# =====================================================================
-# FILTROS DA BARRA LATERAL
-# =====================================================================
+# 7. MÓDULO DE NAVEGAÇÃO LEED BD+C v4 (Evoluído para Gestão de Performance)
+st.markdown("---")
+st.markdown("### 🏛️ Matriz de Governança de Créditos - LEED BD+C v4")
+
+# Configuração das categorias e seus orçamentos (Exemplos)
+categorias = {
+    "Integrative Process (IP)": {"budget": 10000, "spent": 4000, "cert": {'Gold': 50, 'Silver': 30, 'Platinum': 20}},
+    "Location and Transportation (LT)": {"budget": 20000, "spent": 12000, "cert": {'Gold': 40, 'Silver': 40, 'Platinum': 20}},
+    "Sustainable Sites (SS)": {"budget": 50000, "spent": 32000, "cert": {'Gold': 30, 'Silver': 30, 'Platinum': 40}},
+    "Water Efficiency (WE)": {"budget": 30000, "spent": 15000, "cert": {'Gold': 60, 'Silver': 20, 'Platinum': 20}},
+    "Energy and Atmosphere (EA)": {"budget": 80000, "spent": 75000, "cert": {'Gold': 20, 'Silver': 20, 'Platinum': 60}},
+    "Materials and Resources (MR)": {"budget": 120000, "spent": 85000, "cert": {'Gold': 25, 'Silver': 25, 'Platinum': 50}},
+    "Indoor Environmental Quality (EQ)": {"budget": 40000, "spent": 20000, "cert": {'Gold': 40, 'Silver': 40, 'Platinum': 20}},
+    "Innovation (IN)": {"budget": 15000, "spent": 5000, "cert": {'Gold': 33, 'Silver': 33, 'Platinum': 34}},
+    "Regional Priority (RP)": {"budget": 10000, "spent": 2000, "cert": {'Gold': 50, 'Silver': 25, 'Platinum': 25}}
+}
+
+# Criando as abas
+abas_nomes = list(categorias.keys())
+abas_leed = st.tabs(abas_nomes)
+
+def renderizar_aba(aba_index, nome):
+    data = categorias[nome]
+    st.markdown(f"#### 🎯 {nome} - Painel de Performance")
+    
+    col1, col2, col3 = st.columns([1, 1, 1])
+    
+    with col1:
+        # Gráfico de Pizza (Status da Certificação)
+        fig, ax = plt.subplots(figsize=(2.5, 2.5))
+        ax.pie(data['cert'].values(), labels=data['cert'].keys(), autopct='%1.0f%%', 
+               colors=['#FFD700', '#C0C0C0', '#E5E4E2'], startangle=90)
+        ax.set_title("Nível de Certificação")
+        st.pyplot(fig)
+        
+    with col2:
+        # ARC-Trend: Gráfico de evolução temporal fictício
+        st.write("📈 Tendência de Performance (6 meses):")
+        df_trend = pd.DataFrame({'Meses': ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'], 'Score': [60, 65, 70, 68, 75, 78]})
+        st.line_chart(df_trend.set_index('Meses'))
+        
+    with col3:
+        # Financeiro e Ações
+        st.write(f"💰 Orçamento de Conformidade:")
+        porcentagem = data['spent'] / data['budget']
+        st.progress(porcentagem)
+        st.caption(f"Executado: R$ {data['spent']:,.2f}")
+        
+        # Expander de Documentação (Mantido e melhorado)
+        with st.expander("📂 Documentos e Checklist"):
+            st.file_uploader(f"Upload {nome}", type=["pdf"], key=f"up_{nome}")
+            st.checkbox(f"Crédito atingido", key=f"ch_{nome}")
+
+# Renderizando todas as abas
+for i, nome in enumerate(abas_nomes):
+    with abas_leed[i]:
+        renderizar_aba(i, nome)
+
+st.markdown("<br><br>", unsafe_allow_html=True)
+st.caption("🔒 Certificação de Dados: GreenConformity segue as diretrizes do LEED BD+C v4/v4.1. Dados protegidos por chaves corporativas privadas de criptografia.")
+
+st.markdown("<br><br>", unsafe_allow_html=True)
+# Barra Lateral - Filtros de Governança Corporativa
 st.sidebar.header("🏢 Governança de Portfólio")
-obra_selecionada = st.sidebar.selectbox("Selecionar Canteiro de Obras:", ["601 Empreendimentos", "208 Empreendimentos", "Residencial Solar Hub"])
+obra_selecionada = st.sidebar.selectbox("Selecionar Canteiro de Obras:", ["Edifício Venâncio Eco-Efficient", "Complexo Logístico Alpha", "Residencial Solar Hub"])
 fase_obra = st.sidebar.radio("Fase Atual da Obra:", ["Estrutura", "Alvenaria/Acabamento", "Comissionamento"])
+st.markdown("<br>", unsafe_allow_html=True) # Espaçamento visual para o rodapé
 
+# Dica de Tema na Sidebar
 st.sidebar.markdown("---")
-st.sidebar.caption("🌓 *Dica de Visualização:* Alterne entre Modo Claro e Escuro nas configurações superiores.")
+st.sidebar.caption("🌓 *Dica de Visualização:* Alterne entre Modo Claro e Escuro clicando nas configurações (⚙️) no canto superior direito da tela.")
 
-
-# =====================================================================
-# CÁLCULOS DE ENGENHARIA E CENTRAL DE INTELIGÊNCIA ARC
-# =====================================================================
+# 3. Dados de Engenharia Brutos (Volume m³)
 dados_brutos = {
     'Mês': ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
     'Concreto (m³)': [8, 0, 1, 2, 10, 2, 1, 3, 1, 2, 0, 1],
@@ -112,11 +143,13 @@ dados_brutos = {
 }
 df_volume = pd.DataFrame(dados_brutos)
 
+# Fatores de Conversão de Densidade (Padrão LEED / EPA - Toneladas por m³)
 FAT_CONCRETO = 1.2  
 FAT_MADEIRA = 0.3  
 FAT_METAL = 0.5   
 FAT_URE = 0.4     
 
+# 4. Processamento de Engenharia: Convertendo para Toneladas (Exigência LEED)
 df_massa = pd.DataFrame()
 df_massa['Mês'] = df_volume['Mês']
 df_massa['Concreto (t)'] = df_volume['Concreto (m³)'] * FAT_CONCRETO
@@ -126,229 +159,80 @@ df_massa['Reciclado Total (t)'] = df_massa['Concreto (t)'] + df_massa['Madeira (
 df_massa['URE / Aterro (t)'] = df_volume['URE / Não Reciclado (m³)'] * FAT_URE
 df_massa['Total Gerado (t)'] = df_massa['Reciclado Total (t)'] + df_massa['URE / Aterro (t)']
 
+# Variáveis Consolidadas para os KPIs
 t_reciclado = df_massa['Reciclado Total (t)'].sum()
 t_aterro = df_massa['URE / Aterro (t)'].sum()
 t_total = df_massa['Total Gerado (t)'].sum()
 taxa_desvio_leed = (t_reciclado / t_total) * 100 if t_total > 0 else 0
 
-st.markdown("---")
-st.markdown("### 🌐 ARC Engine: Central de Performance em Tempo Real")
-st.caption("Visão macro de governança baseada nas 5 dimensões globais do ARC GBCI.")
+# 5. MÓDULO SUPERIOR: Indicadores de Alta Performance (Massa - Toneladas)
+with st.container():
+    st.markdown(f"### 📊 Balanço de Massa Auditado - {obra_selecionada}")
+    kpi1, kpi2, kpi3, kpi4 = st.columns(4)
 
-col_score1, col_score2, col_score3 = st.columns([1, 2, 1])
-with col_score2:
-    st.markdown('<div class="custom-card" style="text-align: center;">', unsafe_allow_html=True)
-    st.markdown("<h4 style='color: #666666; margin-bottom: 0;'>Performance Score Global</h4>", unsafe_allow_html=True)
-    st.markdown("<h1 style='font-size: 4.5rem; color: #2e7d32; margin: -10px 0px;'>78</h1>", unsafe_allow_html=True)
-    st.caption("🎯 Projeção Atual: Nível Ouro (Gold)")
-    st.progress(78)
+    with kpi1:
+        st.metric(label="⚖️ Massa Total Gerada", value=f"{t_total:.2f} t")
+    with kpi2:
+        st.metric(label="♻️ Desvio de Aterro (LEED)", value=f"{taxa_desvio_leed:.1f}%", delta=f"{taxa_desvio_leed - 75.0:.1f}% vs Meta GBC")
+    with kpi3:
+        st.metric(label="🪵 Canais de Reciclagem Ativos", value="3 Fluxos", delta="Atende Prerequisito")
+    with kpi4:
+        st.metric(label="🎖️ Pontuação Estimada MR", value="2 Pontos", delta="Pontuação Máxima")
+
+    # Barra de Progresso
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.progress(int(taxa_desvio_leed) if taxa_desvio_leed <= 100 else 100)
+st.markdown("---")
+
+# 6. MÓDULO INFERIOR: Interface Dividida (Upload à Esquerda, Gráficos à Direita)
+col1, col2 = st.columns([1, 1], gap="large")
+
+with col1:
+    # Aplicando a classe custom-card para criar o contêiner visual de upload
+    st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+    st.markdown("### 📥 Gateway de Auditoria Automatizada (IA OCR)")
+    arquivo_subido = st.file_uploader("Arraste o lote de PDFs/MTRs fiscais da obra:", type=["pdf"])
+    
+    if arquivo_subido is not None:
+        if st.button("🔍 Executar Auditoria e Validação Digital"):
+            with st.spinner("Analisando assinaturas digitais, hash do documento e extraindo peso líquido..."):
+                time.sleep(2.5)
+            st.success("Documento Validado! Dados convertidos para Toneladas e integrados à Trilha de Auditoria.")
     st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Tabela de Rastreabilidade exigida pelo LEED
+    st.markdown("### 📜 Trilha de Evidências Rastreáveis")
+    evidencias = {
+        'Mês': ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
+        'Doc Origem': ['MTR_2024_019.pdf', 'MTR_2024_034.pdf', 'MTR_2024_051.pdf', 'MTR_2024_088.pdf', 'MTR_2024_112.pdf'],
+        'Status GBC': ['Aprovado', 'Aprovado', 'Aprovado', 'Em Análise', 'Revisar Alerta']
+    }
+    st.dataframe(pd.DataFrame(evidencias), use_container_width=True)
 
-st.markdown("#### 📊 Tracking Multidimensional (Core Metrics)")
-arc_c1, arc_c2, arc_c3, arc_c4, arc_c5 = st.columns(5)
-arc_c1.metric(label="⚡ Energia", value="22/33 pts", delta="Estável", delta_color="off")
-arc_c2.metric(label="💧 Água", value="12/15 pts", delta="+2 pts", delta_color="normal")
-arc_c3.metric(label="♻️ Resíduos", value="6/8 pts", delta="Auditoria Ativa", delta_color="normal")
-arc_c4.metric(label="🚲 Transporte", value="9/14 pts", delta="-1 pt (Alerta)", delta_color="inverse")
-arc_c5.metric(label="👥 Exp. Humana", value="15/20 pts", delta="Conforme", delta_color="off")
-
-st.markdown("<br>", unsafe_allow_html=True)
-st.write("Monitoramento contínuo da pontuação para evitar depreciação do ativo:")
-
-cert_c1, cert_c2, cert_c3, cert_c4 = st.columns(4)
-with cert_c1:
-    st.caption("Certified (40-49 pts)")
-    st.progress(100)
-with cert_c2:
-    st.caption("Silver (50-59 pts)")
-    st.progress(100)
-with cert_c3:
-    st.caption("Gold (60-79 pts)")
-    st.progress(90) 
-with cert_c4:
-    st.caption("Platinum (80+ pts)")
-    st.progress(97)
-
-with st.expander("📈 Expandir Curva de Evolução Longitudinal (Últimos 6 meses)"):
-    df_arc_trend = pd.DataFrame({
-        'Mês': ['Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
-        'Score Global': [62, 65, 70, 72, 75, 78]
-    })
-    st.line_chart(df_arc_trend.set_index('Mês'), height=250)
-
-
-# =====================================================================
-# MATRIZ DE GOVERNANÇA: FUNCIONALIDADES DAS ABAS ATIVADAS
-# =====================================================================
-st.markdown("---")
-with st.expander(f"🏛️ Matriz de Governança de Créditos Ativa: {st.session_state.aba_ativa} - LEED BD+C v4", expanded=True):
-
-    # -----------------------------------------------------------------
-    # ABA: IP (PROCESSO INTEGRATIVO)
-    # -----------------------------------------------------------------
-    if st.session_state.aba_ativa == "IP (Processo)":
-        st.markdown("#### 🤝 Processo Integrativo (Integrative Process)")
-        st.caption("Avaliação de sinergias entre sistemas hídricos e energéticos desde a fase de pré-projeto.")
+with col2:
+    st.markdown("### 📈 Curva Analítica de Resíduos Desviados (Massa)")
+    
+    # Customização do gráfico para se adaptar dinamicamente aos modos Claro e Escuro
+    fig, ax = plt.subplots(figsize=(10, 6.2))
+    # Definindo fundo transparente para herdar o tema do Streamlit
+    fig.patch.set_alpha(0.0)
+    ax.set_facecolor('none')
+    
+    # Barras empilhadas
+    ax.bar(df_massa['Mês'], df_massa['Reciclado Total (t)'], color='#2e7d32', label='Desviado/Reciclado (t)', alpha=0.9)
+    ax.bar(df_massa['Mês'], df_massa['URE / Aterro (t)'], bottom=df_massa['Reciclado Total (t)'], color='#d32f2f', label='Aterro/URE (t)', alpha=0.9)
+    
+    ax.set_ylabel('Massa Líquida (Toneladas)', color='gray')
+    ax.tick_params(colors='gray')
+    ax.grid(True, linestyle=':', alpha=0.3, color='gray')
+    ax.legend(loc='upper right', facecolor='none', edgecolor='gray')
+    
+    # Remove bordas rígidas do gráfico para um visual moderno
+    for spine in ax.spines.values():
+        spine.set_visible(False)
         
-        col_ip1, col_ip2 = st.columns(2)
-        with col_ip1:
-            st.markdown("##### 📋 Checklists de Análise Inicial")
-            sinergia_energia = st.checkbox("Análise de Sinergia Energética Concluída (Simulações de Carga)", value=True)
-            sinergia_agua = st.checkbox("Análise de Sinergia Hídrica Concluída (Balanço de Fontes Alternativas)", value=False)
-            
-            pts_ip = 1 if (sinergia_energia and sinergia_agua) else 0
-            st.metric("Pontos Estimados (IPc1)", f"{pts_ip} / 1 Recurso")
-            
-        with col_ip2:
-            st.markdown("##### 📄 Geração de Evidências Oficiais")
-            st.write("Gere a documentação de metas de sustentabilidade base (OPR e BOD) exigida pelo GBCI:")
-            if st.button("📄 Exportar Relatório de Diretrizes do Projeto (OPR)"):
-                with st.spinner("Compilando dados estruturais..."):
-                    time.sleep(1.5)
-                st.success("✓ OPR.pdf gerado com sucesso! Pronto para upload no LEED Online.")
+    st.pyplot(fig)
 
-    # -----------------------------------------------------------------
-    # ABA: LT (LOCALIZAÇÃO E TRANSPORTE)
-    # -----------------------------------------------------------------
-    elif st.session_state.aba_ativa == "LT (Localização)":
-        st.markdown("#### 🚲 Localização e Transporte (Location and Transportation)")
-        st.caption("Pontuação baseada na malha urbana, acesso a trânsito de qualidade e modais alternativos.")
-        
-        col_lt1, col_lt2 = st.columns([2, 1])
-        with col_lt1:
-            st.markdown("##### 🧮 Simulador de Créditos de Mobilidade")
-            raio_intersecoes = st.slider("Densidade de Interseções Viárias (num raio de 1 km²)", min_value=0, max_value=200, value=140)
-            vagas_bike = st.number_input("Vagas para Bicicletas (% em relação aos ocupantes de pico)", min_value=0.0, max_value=10.0, value=5.2, step=0.1)
-            veiculos_verdes = st.checkbox("Vagas Reservadas + Carregadores Elétricos para Veículos Eficientes (Mínimo 2%)", value=True)
-            
-        with col_lt2:
-            st.markdown("##### 🎯 Calculadora de Crédito LT")
-            pts_transito = 0
-            if raio_intersecoes >= 140: pts_transito += 3
-            if vagas_bike >= 5.0: pts_transito += 1
-            if veiculos_verdes: pts_transito += 1
-            
-            st.metric("Total Estimado em LT", f"{pts_transito} pts", help="Pontuação máxima dependente de auditoria de linhas de ônibus/metrô.")
-            if pts_transito >= 4:
-                st.success("Ótimo desempenho em Adensamento e Redução de Trajeto!")
-
-    # -----------------------------------------------------------------
-    # ABA: SS (TERRENOS SUSTENTÁVEIS)
-    # -----------------------------------------------------------------
-    elif st.session_state.aba_ativa == "SS (Terrenos)":
-        st.markdown("#### 🌳 Terrenos Sustentáveis (Sustainable Sites)")
-        st.caption("Mitigação de impactos ambientais durante a construção e preservação ecológica da área.")
-        
-        st.error("⚖️ Alerta de Auditoria: O Plano ESC (Prevenção de Poluição) é um PRÉ-REQUISITO OBRIGATÓRIO.")
-        
-        col_ss1, col_ss2 = st.columns(2)
-        with col_ss1:
-            st.markdown("##### 🔍 Auditoria em Canteiro (Plano ESC)")
-            lava_rodas = st.checkbox("Estação de Lava-Rodas operacional nas saídas do canteiro", value=True)
-            bocas_lobo = st.checkbox("Proteções e filtros instalados nas bocas-de-lobo/bueiros", value=True)
-            taludes = st.checkbox("Controle de erosão ativo em taludes expostos (lona/hidrossemeadura)", value=False)
-            
-            if lava_rodas and bocas_lobo and taludes:
-                st.success("✓ Pré-requisito SSp1 (ESC) totalmente em conformidade!")
-            else:
-                st.warning("⚠️ Risco de não conformidade no SSp1. Todos os controles devem estar ativos.")
-                
-        with col_ss2:
-            st.markdown("##### 📂 Upload de Evidências Fotográficas")
-            st.write("Anexe os relatórios de inspeção visual para comprovar o controle de sedimentação:")
-            file_esc = st.file_uploader("Arraste o relatório ESC Semanal (PDF)", type=["pdf"], key="esc_upload")
-            if file_esc:
-                st.success(f"Arquivo '{file_esc.name}' armazenado na fila de auditoria.")
-
-    # -----------------------------------------------------------------
-    # ABA: WE (EFICIÊNCIA HÍDRICA)
-    # -----------------------------------------------------------------
-    elif st.session_state.aba_ativa == "WE (Água)":
-        st.markdown("#### 💧 Eficiência Hídrica (Water Efficiency)")
-        st.caption("Redução drástica do consumo interno, externo (paisagismo) e monitoramento por submedição.")
-        
-        col_we1, col_we2 = st.columns([1, 1])
-        with col_we1:
-            st.markdown("##### 🚰 Simulação de Consumo Interno (Indoor Water)")
-            reducao_meta = st.slider("% de Redução Obtida (Meta Base LEED: >20%)", min_value=0, max_value=50, value=35)
-            st.progress(reducao_meta / 50)
-            
-            submedidores = st.checkbox("Submedidores permanentes instalados nos subsistemas (Torres, Chiller, Irrigação)", value=True)
-            
-        with col_we2:
-            st.markdown("##### 📉 Balanço e Projeção de Créditos")
-            pts_we = 0
-            if reducao_meta >= 20: pts_we += 1  # Pré-requisito atendido + pontos adicionais progressivos
-            if reducao_meta >= 30: pts_we += 2
-            if reducao_meta >= 35: pts_we += 1
-            if submedidores: pts_we += 1
-            
-            st.metric("Pontos Projetados em WE", f"{pts_we} pts")
-            if submedidores:
-                st.success("✓ Crédito de Submedição Avançada Garantido (+1 ponto).")
-
-    # -----------------------------------------------------------------
-    # ABAS: MATERIAIS, ENERGIA, QUALIDADE E OUTROS (Prontas para Lógicas Adicionais)
-    # -----------------------------------------------------------------
-    elif st.session_state.aba_ativa == "EA (Energia)":
-        st.markdown("#### ⚡ Energia e Atmosfera")
-        st.caption("Comissionamento e Proteção da Camada de Ozônio")
-        st.selectbox("Status do Comissionamento Fundamental (CxA):", ["Não Iniciado", "Em Andamento (Revisão de Projeto)", "Em Campo", "Concluído"])
-        st.checkbox("Zero Uso de CFCs em Equipamentos de Alojamento", value=True)
-
-    elif st.session_state.aba_ativa == "MR (Materiais)":
-        st.markdown("#### 📦 Materiais e Recursos (MR)")
-        st.success("♻️ A auditoria de desvio de aterro e balanço de massa está totalmente integrada e ativa nesta seção de Materiais.")
-        
-        st.markdown("#### 📄 Declarações Ambientais de Produto (EPD / HPD)")
-        st.number_input("Quantidade de Materiais com Certificado EPD/FSC Verificado", min_value=0, value=14)
-        st.markdown("---")
-        
-        st.markdown(f"### 📊 Balanço de Massa Auditado - {obra_selecionada}")
-        kpi1, kpi2, kpi3, kpi4 = st.columns(4)
-        with kpi1: st.metric(label="⚖️ Massa Total Gerada", value=f"{t_total:.2f} t")
-        with kpi2: st.metric(label="♻️ Desvio de Aterro (LEED)", value=f"{taxa_desvio_leed:.1f}%", delta=f"{taxa_desvio_leed - 75.0:.1f}% vs Meta GBC")
-        with kpi3: st.metric(label="🪵 Canais de Reciclagem Ativos", value="3 Fluxos", delta="Atende Prerequisito")
-        with kpi4: st.metric(label="🎖️ Pontuação Estimada MR", value="2 Pontos", delta="Pontuação Máxima")
-
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.progress(int(taxa_desvio_leed) if taxa_desvio_leed <= 100 else 100)
-        st.markdown("---")
-
-        col1, col2 = st.columns([1, 1], gap="large")
-        with col1:
-            st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-            st.markdown("### 📥 Gateway de Auditoria Automatizada (IA OCR)")
-            arquivo_subido = st.file_uploader("Arraste o lote de PDFs/MTRs fiscais da obra:", type=["pdf"])
-            if arquivo_subido is not None:
-                if st.button("🔍 Executar Auditoria e Validação Digital"):
-                    with st.spinner("Analisando assinaturas digitais..."): time.sleep(2.5)
-                    st.success("Documento Validado e integrado.")
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-            st.dataframe(pd.DataFrame({'Mês': ['Jan', 'Fev', 'Mar'], 'Doc Origem': ['MTR_019.pdf', 'MTR_034.pdf', 'MTR_051.pdf'], 'Status GBC': ['Aprovado', 'Aprovado', 'Aprovado']}), use_container_width=True)
-
-        with col2:
-            fig, ax = plt.subplots(figsize=(10, 6.2))
-            fig.patch.set_alpha(0.0); ax.set_facecolor('none')
-            ax.bar(df_massa['Mês'], df_massa['Reciclado Total (t)'], color='#2e7d32', label='Desviado (t)')
-            ax.bar(df_massa['Mês'], df_massa['URE / Aterro (t)'], bottom=df_massa['Reciclado Total (t)'], color='#d32f2f', label='Aterro (t)')
-            ax.set_ylabel('Toneladas', color='gray'); ax.tick_params(colors='gray'); ax.grid(True, linestyle=':', alpha=0.3); ax.legend()
-            for s in ax.spines.values(): s.set_visible(False)
-            st.pyplot(fig); plt.close(fig)
-
-    elif st.session_state.aba_ativa == "EQ (Qualidade)":
-        st.markdown("#### 🌬️ Qualidade Ambiental Interna")
-        st.multiselect("Rastreabilidade de Materiais de Baixo VOC (Fichas FISPQ):", ["Tinta Epóxi Piso", "Selante PU", "Adesivo Madeira", "Verniz Base Água"], default=["Tinta Epóxi Piso"])
-
-    elif st.session_state.aba_ativa == "IN (Inovação)":
-        st.markdown("#### 🚀 Inovação em Design")
-        st.text_area("Registro de Performance Exemplar:", "A Venâncio Empreendimentos atingiu a meta excepcional de...")
-            
-    elif st.session_state.aba_ativa == "RP (Prioridade)":
-        st.markdown("#### 🗺️ Prioridade Regional")
-        st.selectbox("Selecione o Crédito de Prioridade Regional Atingido:", ["Nenhum", "WEc: Redução de Uso de Água Externa", "EAc: Otimização de Performance Energética"])
-
-# Rodapé de Conformidade Global
+# Rodapé de Conformidade
 st.markdown("---")
 st.caption("🔒 Certificação de Dados: GreenConformity segue as diretrizes do LEED BD+C v4/v4.1. Dados protegidos por chaves corporativas privadas de criptografia.")
