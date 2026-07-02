@@ -23,7 +23,7 @@ st.markdown("""
     /* Hierarquia Tipográfica Rigorosa */
     .brand-title {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 1.75rem; /* Ajustado para equivaler ao tamanho do h3 (###) */
+        font-size: 5.25rem; /* Ajustado para equivaler ao tamanho do h3 (###) */
         font-weight: 700;
         color: #2e7d32; /* Alterado para o mesmo tom verde da plataforma */
         letter-spacing: -0.5px;
