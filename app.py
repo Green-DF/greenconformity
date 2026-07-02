@@ -10,25 +10,13 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. Injeção de CSS para Centralização de Títulos, Estilização de Cartões e Logo USGBC
+# 2. Injeção de CSS para Estilização de Elementos e Cartões
 st.markdown("""
     <style>
-    .usgbc-logo {
-        position: absolute;
-        top: -40px; /* Ajuste para encaixar perfeitamente no topo direito da tela */
-        right: 10px;
-        width: 140px;
-        z-index: 100;
-    }
-    .centered-title {
-        text-align: center;
-        margin-bottom: 0px;
-        font-weight: 700;
-    }
     .centered-subtitle {
         text-align: center;
         color: #666666;
-        margin-top: -10px;
+        margin-top: 10px;
         margin-bottom: 5px;
         font-size: 1.15rem;
         font-weight: 500;
@@ -49,14 +37,51 @@ st.markdown("""
         margin-bottom: 20px;
     }
     </style>
-    
-    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/36/USGBC_logo.svg/512px-USGBC_logo.svg.png" class="usgbc-logo" alt="USGBC Logo">
 """, unsafe_allow_html=True)
 
-# Aplicação dos Títulos Centralizados Solicitados
-st.markdown('<h1 class="centered-title">🌱 Plataforma GreenConformity</h1>', unsafe_allow_html=True)
+
+# =====================================================================
+# HEADER UNIFICADO (Título Esquerdo, Navbar Central e Ícone Direito)
+# =====================================================================
+header_col1, header_col2, header_col3 = st.columns([2, 7, 1])
+
+with header_col1:
+    st.markdown("<h3 style='margin-top: 8px; font-size: 1.35rem; font-weight: 700; color: #2e7d32; white-space: nowrap;'>Green Conformity</h3>", unsafe_allow_html=True)
+
+with header_col2:
+    opcoes_navbar = [
+        "IP (Processo)", 
+        "LT (Localização)", 
+        "SS (Terrenos)", 
+        "WE (Água)", 
+        "EA (Energia)", 
+        "MR (Materiais)", 
+        "EQ (Qualidade Interna)", 
+        "IN (Inovação)", 
+        "RP (Prioridade)"
+    ]
+    aba_selecionada = st.radio("Navegação de Categorias:", opcoes_navbar, horizontal=True, label_visibility="collapsed")
+
+with header_col3:
+    # Ícone vetorial customizado: Balança com Elemento Natural (Folha)
+    st.markdown("""
+        <div style="text-align: right; margin-top: 4px;">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 3V21M6 21H18" stroke="#2e7d32" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4 7H20" stroke="#2e7d32" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4 7L2 13M4 7L6 13M2 13H6" stroke="#2e7d32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M20 7L18 13M20 7L22 13M18 13H22" stroke="#2e7d32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 7C13.5 8.5 14 11 12 13C10 11 10.5 8.5 12 7Z" fill="#81c784" opacity="0.9"/>
+            </svg>
+        </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("---")
+
+# Linhas de Identificação do Subtítulo e Painel Ativo
 st.markdown('<p class="centered-subtitle">Por Jonas Silva - LEED GA</p>', unsafe_allow_html=True)
 st.markdown('<p class="centered-painel">601 Empreendimentos - Painel de Conformidade Ambiental e Certificação</p>', unsafe_allow_html=True)
+
 
 # =====================================================================
 # ANTECIPAÇÃO: FILTROS DA BARRA LATERAL (Necessário para escopo dinâmico)
@@ -65,9 +90,9 @@ st.sidebar.header("🏢 Governança de Portfólio")
 obra_selecionada = st.sidebar.selectbox("Selecionar Canteiro de Obras:", ["Edifício Venâncio Eco-Efficient", "Complexo Logístico Alpha", "Residencial Solar Hub"])
 fase_obra = st.sidebar.radio("Fase Atual da Obra:", ["Estrutura", "Alvenaria/Acabamento", "Comissionamento"])
 
-# Dica de Tema na Sidebar
 st.sidebar.markdown("---")
 st.sidebar.caption("🌓 *Dica de Visualização:* Alterne entre Modo Claro e Escuro clicando nas configurações (⚙️) no canto superior direito da tela.")
+
 
 # =====================================================================
 # ANTECIPAÇÃO: CÁLCULOS DE ENGENHARIA BRUTOS (Massa e Densidade LEED)
@@ -81,13 +106,11 @@ dados_brutos = {
 }
 df_volume = pd.DataFrame(dados_brutos)
 
-# Fatores de Conversão de Densidade (Padrão LEED / EPA - Toneladas por m³)
 FAT_CONCRETO = 1.2  
 FAT_MADEIRA = 0.3  
 FAT_METAL = 0.5   
 FAT_URE = 0.4     
 
-# Processamento de Engenharia: Convertendo para Toneladas
 df_massa = pd.DataFrame()
 df_massa['Mês'] = df_volume['Mês']
 df_massa['Concreto (t)'] = df_volume['Concreto (m³)'] * FAT_CONCRETO
@@ -97,7 +120,6 @@ df_massa['Reciclado Total (t)'] = df_massa['Concreto (t)'] + df_massa['Madeira (
 df_massa['URE / Aterro (t)'] = df_volume['URE / Não Reciclado (m³)'] * FAT_URE
 df_massa['Total Gerado (t)'] = df_massa['Reciclado Total (t)'] + df_massa['URE / Aterro (t)']
 
-# Variáveis Consolidadas para os KPIs
 t_reciclado = df_massa['Reciclado Total (t)'].sum()
 t_aterro = df_massa['URE / Aterro (t)'].sum()
 t_total = df_massa['Total Gerado (t)'].sum()
@@ -111,7 +133,6 @@ st.markdown("---")
 st.markdown("### 🌐 ARC Engine: Central de Performance em Tempo Real")
 st.caption("Visão macro de governança baseada nas 5 dimensões globais do ARC GBCI.")
 
-# 1. Visão Global (Performance Score Centralizado)
 col_score1, col_score2, col_score3 = st.columns([1, 2, 1])
 
 with col_score2:
@@ -122,7 +143,6 @@ with col_score2:
     st.progress(78)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 2. Desmembramento nas 5 Categorias Oficiais do ARC
 st.markdown("#### 📊 Tracking Multidimensional (Core Metrics)")
 arc_c1, arc_c2, arc_c3, arc_c4, arc_c5 = st.columns(5)
 
@@ -132,7 +152,6 @@ arc_c3.metric(label="♻️ Resíduos", value="6/8 pts", delta="Auditoria Ativa"
 arc_c4.metric(label="🚲 Transporte", value="9/14 pts", delta="-1 pt (Alerta)", delta_color="inverse")
 arc_c5.metric(label="👥 Exp. Humana", value="15/20 pts", delta="Conforme", delta_color="off")
 
-# 3. Análise Longitudinal (Histórico de Tendência do ARC)
 st.markdown("<br>", unsafe_allow_html=True)
 with st.expander("📈 Expandir Curva de Evolução Longitudinal (Últimos 6 meses)"):
     st.write("Monitoramento contínuo da pontuação para evitar depreciação do ativo:")
@@ -144,29 +163,13 @@ with st.expander("📈 Expandir Curva de Evolução Longitudinal (Últimos 6 mes
 
 
 # =====================================================================
-# NOVO FORMATO: MATRIZ DE GOVERNANÇA (MENU EXPANSÍVEL + NAVBAR)
+# MATRIZ DE GOVERNANÇA (MENU EXPANSÍVEL CONECTADO AO NAVBAR SUPERIOR)
 # =====================================================================
 st.markdown("---")
 with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", expanded=True):
     st.markdown("Painel de auditoria de requisitos e coleta de evidências para a certificação do ativo:")
-
-    # Criação do Navbar utilizando rádio horizontal
-    opcoes_navbar = [
-        "IP (Processo)", 
-        "LT (Localização)", 
-        "SS (Terrenos)", 
-        "WE (Água)", 
-        "EA (Energia)", 
-        "MR (Materiais)", 
-        "EQ (Qualidade Interna)", 
-        "IN (Inovação)", 
-        "RP (Prioridade)"
-    ]
-    
-    aba_selecionada = st.radio("Navegação de Categorias:", opcoes_navbar, horizontal=True, label_visibility="collapsed")
     st.markdown("---")
 
-    # Condicionais para renderizar o conteúdo com base na seleção do Navbar
     if aba_selecionada == "IP (Processo)":
         st.markdown("#### 🤝 Processo Integrativo")
         st.caption("Documentação de Sinergia na Fase de Projeto")
@@ -211,7 +214,6 @@ with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", ex
         st.number_input("Quantidade de Materiais com Certificado EPD/FSC Verificado", min_value=0, value=14)
         st.markdown("---")
         
-        # INCLUSÃO: MÓDULO DE BALANÇO DE MASSA AUDITADO
         st.markdown(f"### 📊 Balanço de Massa Auditado - {obra_selecionada}")
         kpi1, kpi2, kpi3, kpi4 = st.columns(4)
 
@@ -228,7 +230,6 @@ with st.expander("🏛️ Matriz de Governança de Créditos - LEED BD+C v4", ex
         st.progress(int(taxa_desvio_leed) if taxa_desvio_leed <= 100 else 100)
         st.markdown("---")
 
-        # INCLUSÃO: INTERFACE DIVIDIDA - UPLOAD E GRÁFICO
         col1, col2 = st.columns([1, 1], gap="large")
 
         with col1:
